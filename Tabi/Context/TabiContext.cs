@@ -22,6 +22,10 @@ namespace Tabi.Context
         public DbSet<User> Users { get; set; }
         public DbSet<UserType> UserTypes { get; set; }
 
+        public TabiContext(DbContextOptions<TabiContext> options) : base(options)
+        {
+        }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Convert to singular table names
@@ -40,16 +44,30 @@ namespace Tabi.Context
             modelBuilder.Entity<SlopeType>().ToTable("SlopeType");
             modelBuilder.Entity<User>().ToTable("User");
             modelBuilder.Entity<UserType>().ToTable("UserType");
+
+            // Filter entities with IsActive = true
+            modelBuilder.Entity<Crop>().HasQueryFilter(c => c.IsActive);
+            modelBuilder.Entity<CropManagement>().HasQueryFilter(c => c.IsActive);
+            modelBuilder.Entity<CropManagementType>().HasQueryFilter(c => c.IsActive);
+            modelBuilder.Entity<CropState>().HasQueryFilter(c => c.IsActive);
+            modelBuilder.Entity<CropType>().HasQueryFilter(c => c.IsActive);
+            modelBuilder.Entity<DocumentType>().HasQueryFilter(c => c.IsActive);
+            modelBuilder.Entity<Farm>().HasQueryFilter(c => c.IsActive);
+            modelBuilder.Entity<Harvest>().HasQueryFilter(c => c.IsActive);
+            modelBuilder.Entity<HarvestPayment>().HasQueryFilter(c => c.IsActive);
+            modelBuilder.Entity<HarvestState>().HasQueryFilter(c => c.IsActive);
+            modelBuilder.Entity<Lot>().HasQueryFilter(c => c.IsActive);
+            modelBuilder.Entity<PaymentType>().HasQueryFilter(c => c.IsActive);
+            modelBuilder.Entity<SlopeType>().HasQueryFilter(c => c.IsActive);
+            modelBuilder.Entity<User>().HasQueryFilter(c => c.IsActive);
+            modelBuilder.Entity<UserType>().HasQueryFilter(c => c.IsActive);
+
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             // Configure lazy loading (auto relationships)
             optionsBuilder.UseLazyLoadingProxies();
-        }
-
-        public TabiContext(DbContextOptions<TabiContext> options) : base(options)
-        {
         }
 
     }

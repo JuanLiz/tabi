@@ -28,10 +28,7 @@ namespace Tabi.Services
 
         public async Task<SlopeType> CreateSlopeType(string Name)
         {
-            SlopeType slopeType = new()
-            {
-                Name = Name
-            };
+            SlopeType slopeType = new() { Name = Name };
             return await slopeTypeRepository.CreateSlopeType(slopeType);
         }
 

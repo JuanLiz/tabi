@@ -29,10 +29,7 @@ namespace Tabi.Services
 
         public async Task<CropManagementType> CreateCropManagementType(string Name)
         {
-            CropManagementType cropManagementType = new()
-            {
-                Name = Name
-            };
+            CropManagementType cropManagementType = new() { Name = Name };
             return await cropManagementTypeRepository.CreateCropManagementType(cropManagementType);
         }
 

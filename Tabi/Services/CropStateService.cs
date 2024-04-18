@@ -28,10 +28,7 @@ namespace Tabi.Services
 
         public async Task<CropState> CreateCropState(string Name)
         {
-            CropState cropState = new()
-            {
-                Name = Name
-            };
+            CropState cropState = new() { Name = Name };
             return await cropStateRepository.CreateCropState(cropState);
         }
 

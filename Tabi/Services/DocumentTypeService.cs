@@ -28,10 +28,7 @@ namespace Tabi.Services
 
         public async Task<DocumentType> CreateDocumentType(string Name)
         {
-            DocumentType documentType = new()
-            {
-                Name = Name
-            };
+            DocumentType documentType = new() { Name = Name };
             return await documentTypeRepository.CreateDocumentType(documentType);
         }
 

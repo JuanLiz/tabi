@@ -27,10 +27,7 @@ namespace Tabi.Services
 
         public async Task<PaymentType> CreatePaymentType(string Name)
         {
-            PaymentType paymentType = new()
-            {
-                Name = Name
-            };
+            PaymentType paymentType = new() { Name = Name };
             return await paymentTypeRepository.CreatePaymentType(paymentType);
         }
 

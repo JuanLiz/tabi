@@ -27,10 +27,7 @@ namespace Tabi.Services
 
         public async Task<HarvestState> CreateHarvestState(string Name)
         {
-            HarvestState harvestState = new()
-            {
-                Name = Name
-            };
+            HarvestState harvestState = new() { Name = Name };
             return await harvestStateRepository.CreateHarvestState(harvestState);
         }
 

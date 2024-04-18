@@ -28,10 +28,7 @@ namespace Tabi.Services
 
         public async Task<UserType> CreateUserType(string Name)
         {
-            UserType userType = new()
-            {
-                Name = Name
-            };
+            UserType userType = new() { Name = Name };
             return await userTypeRepository.CreateUserType(userType);
         }
 

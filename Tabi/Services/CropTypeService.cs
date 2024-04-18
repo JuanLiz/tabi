@@ -30,10 +30,7 @@ namespace Tabi.Services
 
         public async Task<CropType> CreateCropType(string Name)
         {
-            CropType cropType = new()
-            {
-                Name = Name
-            };
+            CropType cropType = new() { Name = Name };
             return await cropTypeRepository.CreateCropType(cropType);
         }
 
