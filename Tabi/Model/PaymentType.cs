@@ -6,7 +6,7 @@ namespace Tabi.Model
     {
         [Key]
         public int PaymentTypeID { get; set; }
-        [Required]
+        
         public required string Name { get; set; }
     }
 }

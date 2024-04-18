@@ -7,8 +7,8 @@ namespace Tabi.Model
         [Key]
         public int SlopeTypeID { get; set; }
 
-        [Required]
-        [StringLength(20)]
+        
+        [MaxLength(20)]
         public required string Name { get; set; }
     }
 }

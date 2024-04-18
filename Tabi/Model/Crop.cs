@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Tabi.Model
 {
@@ -7,30 +8,21 @@ namespace Tabi.Model
     {
         [Key]
         public int CropID { get; set; }
-        
-        [Required]
         [ForeignKey(nameof(Lot))]
-        public int LotID { get; set; }
-        
-        [Required]
-        public float Hectares { get; set; }
-        
-        [Required]
+        public required int LotID { get; set; }
+        public required float Hectares { get; set; }
         [ForeignKey(nameof(CropType))]
-        public int CropTypeID { get; set; }
-        
-        [Required]
+        public required int CropTypeID { get; set; }
         [ForeignKey(nameof(CropStatus))]
-        public int CropStatusID { get; set; }
-        
-        [Required]
-        public DateOnly PlantingDate { get; set; }
-
+        public required int CropStatusID { get; set; }
+        public required DateOnly PlantingDate { get; set; }
         public DateOnly? HarvestDate { get; set; }
+        [JsonIgnore]
+        public bool IsActive { get; set; } = true;
 
 
-        public Lot Lot { get; set; } = null!;
-        public CropType CropType { get; set; } = null!;
-        public CropStatus CropStatus { get; set; } = null!;
+        public virtual Lot? Lot { get; set; }
+        public virtual CropType? CropType { get; set; }
+        public virtual CropStatus? CropStatus { get; set; }
     }
 }

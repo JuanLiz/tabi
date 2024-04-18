@@ -8,23 +8,23 @@ namespace Tabi.Model
         [Key]
         public int LotID { get; set; }
 
-        [Required]
+        
         [ForeignKey(nameof(Farm))]
         public int FarmID { get; set; }
 
-        [Required]
-        [StringLength(30)]
-        public string Name { get; set; } = null!;
+        
+        [MaxLength(30)]
+        public string Name { get; set; }
 
-        [Required]
+        
         public float Hectares { get; set; }
 
-        [Required]
+        
         [ForeignKey(nameof(SlopeType))]
         public int SlopeTypeID { get; set; }
 
 
-        public Farm Farm { get; set; } = null!;
-        public SlopeType SlopeType { get; set; } = null!;
+        public Farm Farm { get; set; }
+        public SlopeType SlopeType { get; set; }
     }
 }

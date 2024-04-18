@@ -1,43 +1,43 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
+using Microsoft.EntityFrameworkCore;
 
 namespace Tabi.Model
 {
+    [Index(nameof(Username), IsUnique = true)]
+    [Index(nameof(Email), IsUnique = true)]
+    [Index(nameof(DocumentNumber), IsUnique = true)]
     public class User
     {
         [Key]
         public int UserID { get; set; }
-
-        [Required]
         [ForeignKey(nameof(UserType))]
-        public int UserTypeID { get; set; }
-
-        [Required]
-        [StringLength(30)]
-        public string Name { get; set; } = null!;
-
-        [Required]
-        [StringLength(30)]
-        public string LastName { get; set; } = null!;
-
+        public required int UserTypeID { get; set; }
+        [MaxLength(30)]
+        public required string Name { get; set; }
+        [MaxLength(30)]
+        public required string LastName { get; set; }
         [ForeignKey(nameof(DocumentType))]
         public int? DocumentTypeID { get; set; }
-
-        public string? Document { get; set; }
-
-        [EmailAddress(ErrorMessage = "Invalid Email Address")]
-        public string? Email { get; set; }
-
-        [Required]
-        [StringLength(18, MinimumLength = 6, ErrorMessage = "Password must be between 6 and 18 characters")]
-        public string Password { get; set; } = null!;
-
-        [Phone(ErrorMessage = "Invalid Phone Number")]
+        [MaxLength(10)]
+        public string? DocumentNumber { get; set; }
+        [MaxLength(12)]
+        public string? Username { get; set; }
+        [MaxLength(320)]
+        public required string Email { get; set; }
+        [MinLength(6)]
+        [MaxLength(128)]
+        public required string Password { get; set; }
+        [MaxLength(10)]
         public string? Phone { get; set; }
+        [MaxLength(50)]
         public string? Address { get; set; }
+        [JsonIgnore]
+        public bool IsActive { get; set; } = true;
 
 
-        public UserType UserType { get; set; } = null!;
-        public DocumentType DocumentType { get; set; } = null!;
+        public virtual UserType? UserType { get; set; }
+        public virtual DocumentType? DocumentType { get; set; }
     }
 }

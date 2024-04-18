@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Tabi.Model
 {
@@ -6,12 +7,10 @@ namespace Tabi.Model
     {
         [Key]
         public int CropTypeID { get; set; }
-
-        [Required]
-        [StringLength(30)]
+        [MaxLength(30)]
         public required string Name { get; set; }
-
-        [Required]
         public float ExpectedYield { get; set; }
+        [JsonIgnore]
+        public bool IsActive { get; set; } = true;
     }
 }
