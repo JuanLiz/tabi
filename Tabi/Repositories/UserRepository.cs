@@ -8,56 +8,45 @@ namespace Tabi.Repositories
     public interface IUserRepository
     {
         Task<IEnumerable<User>> GetUsers();
-        Task<User> GetUser(int id);
-        Task<User> PostUser(User user);
-        Task<User> PutUser(int id, User user);
-        Task<User> DeleteUser(int id);
-
+        Task<User?> GetUser(int id);
+        Task<User> CreateUser(User user);
+        Task<User> UpdateUser(User user);
+        Task<User?> DeleteUser(int id);
     }
 
-    public class UserRepository : IUserRepository
+    public class UserRepository(TabiContext db) : IUserRepository
     {
-        private readonly TabiContext _context;
-
-        public UserRepository(TabiContext context)
-        {
-            _context = context;
-        }
-
         public async Task<IEnumerable<User>> GetUsers()
         {
-            return await _context.Users.ToListAsync();
+            return await db.Users.ToListAsync();
         }
 
-        public async Task<User> GetUser(int id)
+        public async Task<User?> GetUser(int id)
         {
-            return await _context.Users.FindAsync(id);
+            return await db.Users.FindAsync(id);
         }
 
-        public async Task<User> PostUser(User user)
+        public async Task<User> CreateUser(User user)
         {
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+            db.Users.Add(user);
+            await db.SaveChangesAsync();
             return user;
         }
 
-        public async Task<User> PutUser(int id, User user)
+        public async Task<User> UpdateUser(User user)
         {
-            _context.Entry(user).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+            db.Entry(user).State = EntityState.Modified;
+            await db.SaveChangesAsync();
             return user;
         }
 
-        public async Task<User> DeleteUser(int id)
+        public async Task<User?> DeleteUser(int id)
         {
-            var user = await _context.Users.FindAsync(id);
-            if (user == null)
-            {
-                return null;
-            }
-
-            _context.Users.Remove(user);
-            await _context.SaveChangesAsync();
+            User? user = await db.Users.FindAsync(id);
+            if (user == null) return user;
+            user.IsActive = false;
+            db.Entry(user).State = EntityState.Modified;
+            await db.SaveChangesAsync();
             return user;
         }
     }

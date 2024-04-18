@@ -8,56 +8,46 @@ namespace Tabi.Repositories
     public interface ICropTypeRepository
     {
         Task<IEnumerable<CropType>> GetCropTypes();
-        Task<CropType> GetCropType(int id);
-        Task<CropType> PostCropType(CropType cropType);
-        Task<CropType> PutCropType(int id, CropType cropType);
-        Task<CropType> DeleteCropType(int id);
+        Task<CropType?> GetCropType(int id);
+        Task<CropType> CreateCropType(CropType cropType);
+        Task<CropType> UpdateCropType(CropType cropType);
+        Task<CropType?> DeleteCropType(int id);
 
     }
 
-    public class CropTypeRepository : ICropTypeRepository
+    public class CropTypeRepository(TabiContext db) : ICropTypeRepository
     {
-        private readonly TabiContext _context;
-
-        public CropTypeRepository(TabiContext context)
-        {
-            _context = context;
-        }
-
         public async Task<IEnumerable<CropType>> GetCropTypes()
         {
-            return await _context.CropTypes.ToListAsync();
+            return await db.CropTypes.ToListAsync();
         }
 
-        public async Task<CropType> GetCropType(int id)
+        public async Task<CropType?> GetCropType(int id)
         {
-            return await _context.CropTypes.FindAsync(id);
+            return await db.CropTypes.FindAsync(id);
         }
 
-        public async Task<CropType> PostCropType(CropType cropType)
+        public async Task<CropType> CreateCropType(CropType cropType)
         {
-            _context.CropTypes.Add(cropType);
-            await _context.SaveChangesAsync();
+            db.CropTypes.Add(cropType);
+            await db.SaveChangesAsync();
             return cropType;
         }
 
-        public async Task<CropType> PutCropType(int id, CropType cropType)
+        public async Task<CropType> UpdateCropType(CropType cropType)
         {
-            _context.Entry(cropType).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+            db.Entry(cropType).State = EntityState.Modified;
+            await db.SaveChangesAsync();
             return cropType;
         }
 
-        public async Task<CropType> DeleteCropType(int id)
+        public async Task<CropType?> DeleteCropType(int id)
         {
-            var cropType = await _context.CropTypes.FindAsync(id);
-            if (cropType == null)
-            {
-                return null;
-            }
-
-            _context.CropTypes.Remove(cropType);
-            await _context.SaveChangesAsync();
+            CropType? cropType = await db.CropTypes.FindAsync(id);
+            if (cropType == null) return cropType;
+            cropType.IsActive = false;
+            db.Entry(cropType).State = EntityState.Modified;
+            await db.SaveChangesAsync();
             return cropType;
         }
     }

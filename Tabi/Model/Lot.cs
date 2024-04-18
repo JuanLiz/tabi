@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Tabi.Model
 {
@@ -7,24 +8,18 @@ namespace Tabi.Model
     {
         [Key]
         public int LotID { get; set; }
-
-        
         [ForeignKey(nameof(Farm))]
-        public int FarmID { get; set; }
-
-        
+        public required int FarmID { get; set; }
         [MaxLength(30)]
-        public string Name { get; set; }
-
-        
-        public float Hectares { get; set; }
-
-        
+        public required string Name { get; set; }
+        public required float Hectares { get; set; }
         [ForeignKey(nameof(SlopeType))]
-        public int SlopeTypeID { get; set; }
+        public required int SlopeTypeID { get; set; }
+        [JsonIgnore]
+        public bool IsActive { get; set; } = true;
 
 
-        public Farm Farm { get; set; }
-        public SlopeType SlopeType { get; set; }
+        public virtual Farm? Farm { get; set; }
+        public virtual SlopeType? SlopeType { get; set; }
     }
 }

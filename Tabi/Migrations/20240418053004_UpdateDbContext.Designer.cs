@@ -12,15 +12,18 @@ using Tabi.Context;
 namespace Tabi.Migrations
 {
     [DbContext(typeof(TabiContext))]
-    [Migration("20240331060511_UpdateDocumentMax")]
-    partial class UpdateDocumentMax
+    [Migration("20240418053004_UpdateDbContext")]
+    partial class UpdateDbContext
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.3")
+                .HasAnnotation("ProductVersion", "8.0.4")
+                .HasAnnotation("Proxies:ChangeTracking", false)
+                .HasAnnotation("Proxies:CheckEquality", false)
+                .HasAnnotation("Proxies:LazyLoading", true)
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -33,7 +36,7 @@ namespace Tabi.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CropID"));
 
-                    b.Property<int>("CropStatusID")
+                    b.Property<int>("CropStateID")
                         .HasColumnType("int");
 
                     b.Property<int>("CropTypeID")
@@ -45,6 +48,9 @@ namespace Tabi.Migrations
                     b.Property<float>("Hectares")
                         .HasColumnType("real");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
                     b.Property<int>("LotID")
                         .HasColumnType("int");
 
@@ -53,7 +59,7 @@ namespace Tabi.Migrations
 
                     b.HasKey("CropID");
 
-                    b.HasIndex("CropStatusID");
+                    b.HasIndex("CropStateID");
 
                     b.HasIndex("CropTypeID");
 
@@ -62,22 +68,79 @@ namespace Tabi.Migrations
                     b.ToTable("Crop", (string)null);
                 });
 
-            modelBuilder.Entity("Tabi.Model.CropStatus", b =>
+            modelBuilder.Entity("Tabi.Model.CropManagement", b =>
                 {
-                    b.Property<int>("CropStatusID")
+                    b.Property<int>("CropManagementID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CropStatusID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CropManagementID"));
+
+                    b.Property<int>("CropID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CropManagementTypeID")
+                        .HasColumnType("int");
+
+                    b.Property<DateOnly>("Date")
+                        .HasColumnType("date");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.HasKey("CropManagementID");
+
+                    b.HasIndex("CropID");
+
+                    b.HasIndex("CropManagementTypeID");
+
+                    b.ToTable("CropManagement", (string)null);
+                });
+
+            modelBuilder.Entity("Tabi.Model.CropManagementType", b =>
+                {
+                    b.Property<int>("CropManagementTypeID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CropManagementTypeID"));
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.HasKey("CropStatusID");
+                    b.HasKey("CropManagementTypeID");
 
-                    b.ToTable("CropStatus", (string)null);
+                    b.ToTable("CropManagementType", (string)null);
+                });
+
+            modelBuilder.Entity("Tabi.Model.CropState", b =>
+                {
+                    b.Property<int>("CropStateID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CropStateID"));
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.HasKey("CropStateID");
+
+                    b.ToTable("CropState", (string)null);
                 });
 
             modelBuilder.Entity("Tabi.Model.CropType", b =>
@@ -90,6 +153,9 @@ namespace Tabi.Migrations
 
                     b.Property<float>("ExpectedYield")
                         .HasColumnType("real");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -108,6 +174,9 @@ namespace Tabi.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DocumentTypeID"));
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -128,12 +197,14 @@ namespace Tabi.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FarmID"));
 
                     b.Property<string>("Address")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<float>("Hectares")
                         .HasColumnType("real");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -158,7 +229,7 @@ namespace Tabi.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("HarvestID"));
 
-                    b.Property<float>("Amount")
+                    b.Property<float?>("Amount")
                         .HasColumnType("real");
 
                     b.Property<int>("CropID")
@@ -167,14 +238,17 @@ namespace Tabi.Migrations
                     b.Property<DateOnly>("Date")
                         .HasColumnType("date");
 
-                    b.Property<int>("HarvestStatusID")
+                    b.Property<int>("HarvestStateID")
                         .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
                     b.HasKey("HarvestID");
 
                     b.HasIndex("CropID");
 
-                    b.HasIndex("HarvestStatusID");
+                    b.HasIndex("HarvestStateID");
 
                     b.ToTable("Harvest", (string)null);
                 });
@@ -192,6 +266,9 @@ namespace Tabi.Migrations
 
                     b.Property<float>("HarvestedAmount")
                         .HasColumnType("real");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
                     b.Property<float>("PaymentAmount")
                         .HasColumnType("real");
@@ -213,22 +290,25 @@ namespace Tabi.Migrations
                     b.ToTable("HarvestPayment", (string)null);
                 });
 
-            modelBuilder.Entity("Tabi.Model.HarvestStatus", b =>
+            modelBuilder.Entity("Tabi.Model.HarvestState", b =>
                 {
-                    b.Property<int>("HarvestStatusID")
+                    b.Property<int>("HarvestStateID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("HarvestStatusID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("HarvestStateID"));
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.HasKey("HarvestStatusID");
+                    b.HasKey("HarvestStateID");
 
-                    b.ToTable("HarvestStatus", (string)null);
+                    b.ToTable("HarvestState", (string)null);
                 });
 
             modelBuilder.Entity("Tabi.Model.Lot", b =>
@@ -244,6 +324,9 @@ namespace Tabi.Migrations
 
                     b.Property<float>("Hectares")
                         .HasColumnType("real");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -270,6 +353,9 @@ namespace Tabi.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PaymentTypeID"));
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -286,6 +372,9 @@ namespace Tabi.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SlopeTypeID"));
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -309,7 +398,7 @@ namespace Tabi.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("Document")
+                    b.Property<string>("DocumentNumber")
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
 
@@ -317,8 +406,12 @@ namespace Tabi.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Email")
-                        .HasMaxLength(254)
-                        .HasColumnType("nvarchar(254)");
+                        .IsRequired()
+                        .HasMaxLength(320)
+                        .HasColumnType("nvarchar(320)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -332,8 +425,8 @@ namespace Tabi.Migrations
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasMaxLength(18)
-                        .HasColumnType("nvarchar(18)");
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("Phone")
                         .HasMaxLength(10)
@@ -342,11 +435,26 @@ namespace Tabi.Migrations
                     b.Property<int>("UserTypeID")
                         .HasColumnType("int");
 
+                    b.Property<string>("Username")
+                        .HasMaxLength(12)
+                        .HasColumnType("nvarchar(12)");
+
                     b.HasKey("UserID");
+
+                    b.HasIndex("DocumentNumber")
+                        .IsUnique()
+                        .HasFilter("[DocumentNumber] IS NOT NULL");
 
                     b.HasIndex("DocumentTypeID");
 
+                    b.HasIndex("Email")
+                        .IsUnique();
+
                     b.HasIndex("UserTypeID");
+
+                    b.HasIndex("Username")
+                        .IsUnique()
+                        .HasFilter("[Username] IS NOT NULL");
 
                     b.ToTable("User", (string)null);
                 });
@@ -358,6 +466,9 @@ namespace Tabi.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserTypeID"));
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -371,9 +482,9 @@ namespace Tabi.Migrations
 
             modelBuilder.Entity("Tabi.Model.Crop", b =>
                 {
-                    b.HasOne("Tabi.Model.CropStatus", "CropStatus")
+                    b.HasOne("Tabi.Model.CropState", "CropState")
                         .WithMany()
-                        .HasForeignKey("CropStatusID")
+                        .HasForeignKey("CropStateID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -389,11 +500,30 @@ namespace Tabi.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("CropStatus");
+                    b.Navigation("CropState");
 
                     b.Navigation("CropType");
 
                     b.Navigation("Lot");
+                });
+
+            modelBuilder.Entity("Tabi.Model.CropManagement", b =>
+                {
+                    b.HasOne("Tabi.Model.Crop", "Crop")
+                        .WithMany()
+                        .HasForeignKey("CropID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Tabi.Model.CropManagementType", "CropManagementType")
+                        .WithMany()
+                        .HasForeignKey("CropManagementTypeID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Crop");
+
+                    b.Navigation("CropManagementType");
                 });
 
             modelBuilder.Entity("Tabi.Model.Farm", b =>
@@ -415,15 +545,15 @@ namespace Tabi.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Tabi.Model.HarvestStatus", "HarvestStatus")
+                    b.HasOne("Tabi.Model.HarvestState", "HarvestState")
                         .WithMany()
-                        .HasForeignKey("HarvestStatusID")
+                        .HasForeignKey("HarvestStateID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Crop");
 
-                    b.Navigation("HarvestStatus");
+                    b.Navigation("HarvestState");
                 });
 
             modelBuilder.Entity("Tabi.Model.HarvestPayment", b =>

@@ -8,57 +8,47 @@ namespace Tabi.Repositories
     public interface ICropRepository
     {
         Task<IEnumerable<Crop>> GetCrops();
-        Task<Crop> GetCrop(int id);
-        Task<Crop> PostCrop(Crop crop);
-        Task<Crop> PutCrop(int id, Crop crop);
-        Task<Crop> DeleteCrop(int id);
+        Task<Crop?> GetCrop(int id);
+        Task<Crop> CreateCrop(Crop crop);
+        Task<Crop> UpdateCrop(Crop crop);
+        Task<Crop?> DeleteCrop(int id);
 
     }
 
-    public class CropRepository : ICropRepository
+    public class CropRepository(TabiContext db) : ICropRepository
     {
-        private readonly TabiContext _context;
-
-        public CropRepository(TabiContext context)
-        {
-            _context = context;
-        }
-
         public async Task<IEnumerable<Crop>> GetCrops()
         {
-            return await _context.Crops.ToListAsync();
+            return await db.Crops.ToListAsync();
         }
 
-        public async Task<Crop> GetCrop(int id)
+        public async Task<Crop?> GetCrop(int id)
         {
-            return await _context.Crops.FindAsync(id);
+            return await db.Crops.FindAsync(id);
         }
 
         // TODO Class creation
-        public async Task<Crop> PostCrop(Crop crop)
+        public async Task<Crop> CreateCrop(Crop crop)
         {
-            _context.Crops.Add(crop);
-            await _context.SaveChangesAsync();
+            db.Crops.Add(crop);
+            await db.SaveChangesAsync();
             return crop;
         }
 
-        public async Task<Crop> PutCrop(int id, Crop crop)
+        public async Task<Crop> UpdateCrop(Crop crop)
         {
-            _context.Entry(crop).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+            db.Entry(crop).State = EntityState.Modified;
+            await db.SaveChangesAsync();
             return crop;
         }
 
-        public async Task<Crop> DeleteCrop(int id)
+        public async Task<Crop?> DeleteCrop(int id)
         {
-            var crop = await _context.Crops.FindAsync(id);
-            if (crop == null)
-            {
-                return null;
-            }
-
-            _context.Crops.Remove(crop);
-            await _context.SaveChangesAsync();
+            Crop? crop = await db.Crops.FindAsync(id);
+            if (crop == null) return crop;
+            crop.IsActive = false;
+            db.Entry(crop).State = EntityState.Modified;
+            await db.SaveChangesAsync();
             return crop;
         }
     }

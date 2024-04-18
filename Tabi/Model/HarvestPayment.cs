@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Tabi.Model
 {
@@ -7,28 +8,22 @@ namespace Tabi.Model
     {
         [Key]
         public int HarvestPaymentID { get; set; }
-        
-        
         [ForeignKey(nameof(Harvest))]
         public int HarvestID { get; set; }
-       
         [ForeignKey(nameof(User))]
         public int? UserID { get; set; }
-        
-        
-        public float HarvestedAmount { get; set; }
-        
-        
+        public required float HarvestedAmount { get; set; }
         [ForeignKey(nameof(PaymentType))]
-        public int PaymentTypeID { get; set; }
-        
-        
-        public float PaymentAmount { get; set; }
+        public required int PaymentTypeID { get; set; }
+        public required float PaymentAmount { get; set; }
+        public required DateOnly PaymentDate { get; set; }
+        [JsonIgnore]
+        public bool IsActive { get; set; } = true;
 
 
-        public Harvest Harvest { get; set; }
-        public User User { get; set; }
-        public PaymentType PaymentType { get; set; }
+        public virtual Harvest? Harvest { get; set; }
+        public virtual User? User { get; set; }
+        public virtual PaymentType? PaymentType { get; set; }
 
     }
 }

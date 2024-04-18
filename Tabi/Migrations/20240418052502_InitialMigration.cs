@@ -6,22 +6,23 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Tabi.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "CropStatus",
+                name: "CropState",
                 columns: table => new
                 {
-                    CropStatusID = table.Column<int>(type: "int", nullable: false)
+                    CropStateID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CropStatus", x => x.CropStatusID);
+                    table.PrimaryKey("PK_CropState", x => x.CropStateID);
                 });
 
             migrationBuilder.CreateTable(
@@ -31,7 +32,8 @@ namespace Tabi.Migrations
                     CropTypeID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
-                    ExpectedYield = table.Column<float>(type: "real", nullable: false)
+                    ExpectedYield = table.Column<float>(type: "real", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -44,7 +46,8 @@ namespace Tabi.Migrations
                 {
                     DocumentTypeID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -52,16 +55,17 @@ namespace Tabi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "HarvestStatus",
+                name: "HarvestState",
                 columns: table => new
                 {
-                    HarvestStatusID = table.Column<int>(type: "int", nullable: false)
+                    HarvestStateID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_HarvestStatus", x => x.HarvestStatusID);
+                    table.PrimaryKey("PK_HarvestState", x => x.HarvestStateID);
                 });
 
             migrationBuilder.CreateTable(
@@ -70,7 +74,8 @@ namespace Tabi.Migrations
                 {
                     PaymentTypeID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -83,7 +88,8 @@ namespace Tabi.Migrations
                 {
                     SlopeTypeID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -96,7 +102,8 @@ namespace Tabi.Migrations
                 {
                     UserTypeID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -113,11 +120,13 @@ namespace Tabi.Migrations
                     Name = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
                     DocumentTypeID = table.Column<int>(type: "int", nullable: true),
-                    Document = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Password = table.Column<string>(type: "nvarchar(18)", maxLength: 18, nullable: false),
-                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    DocumentNumber = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: true),
+                    Username = table.Column<string>(type: "nvarchar(12)", maxLength: 12, nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(320)", maxLength: 320, nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    Phone = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: true),
+                    Address = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -143,8 +152,9 @@ namespace Tabi.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserID = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Hectares = table.Column<float>(type: "real", nullable: false)
+                    Address = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Hectares = table.Column<float>(type: "real", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -166,7 +176,8 @@ namespace Tabi.Migrations
                     FarmID = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
                     Hectares = table.Column<float>(type: "real", nullable: false),
-                    SlopeTypeID = table.Column<int>(type: "int", nullable: false)
+                    SlopeTypeID = table.Column<int>(type: "int", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -194,18 +205,19 @@ namespace Tabi.Migrations
                     LotID = table.Column<int>(type: "int", nullable: false),
                     Hectares = table.Column<float>(type: "real", nullable: false),
                     CropTypeID = table.Column<int>(type: "int", nullable: false),
-                    CropStatusID = table.Column<int>(type: "int", nullable: false),
+                    CropStateID = table.Column<int>(type: "int", nullable: false),
                     PlantingDate = table.Column<DateOnly>(type: "date", nullable: false),
-                    HarvestDate = table.Column<DateOnly>(type: "date", nullable: true)
+                    HarvestDate = table.Column<DateOnly>(type: "date", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Crop", x => x.CropID);
                     table.ForeignKey(
-                        name: "FK_Crop_CropStatus_CropStatusID",
-                        column: x => x.CropStatusID,
-                        principalTable: "CropStatus",
-                        principalColumn: "CropStatusID",
+                        name: "FK_Crop_CropState_CropStateID",
+                        column: x => x.CropStateID,
+                        principalTable: "CropState",
+                        principalColumn: "CropStateID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Crop_CropType_CropTypeID",
@@ -228,9 +240,10 @@ namespace Tabi.Migrations
                     HarvestID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CropID = table.Column<int>(type: "int", nullable: false),
-                    HarvestStatusID = table.Column<int>(type: "int", nullable: false),
+                    HarvestStateID = table.Column<int>(type: "int", nullable: false),
                     Date = table.Column<DateOnly>(type: "date", nullable: false),
-                    Amount = table.Column<float>(type: "real", nullable: false)
+                    Amount = table.Column<float>(type: "real", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -242,10 +255,10 @@ namespace Tabi.Migrations
                         principalColumn: "CropID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Harvest_HarvestStatus_HarvestStatusID",
-                        column: x => x.HarvestStatusID,
-                        principalTable: "HarvestStatus",
-                        principalColumn: "HarvestStatusID",
+                        name: "FK_Harvest_HarvestState_HarvestStateID",
+                        column: x => x.HarvestStateID,
+                        principalTable: "HarvestState",
+                        principalColumn: "HarvestStateID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -259,7 +272,8 @@ namespace Tabi.Migrations
                     UserID = table.Column<int>(type: "int", nullable: true),
                     HarvestedAmount = table.Column<float>(type: "real", nullable: false),
                     PaymentTypeID = table.Column<int>(type: "int", nullable: false),
-                    PaymentAmount = table.Column<float>(type: "real", nullable: false)
+                    PaymentAmount = table.Column<float>(type: "real", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -284,9 +298,9 @@ namespace Tabi.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Crop_CropStatusID",
+                name: "IX_Crop_CropStateID",
                 table: "Crop",
-                column: "CropStatusID");
+                column: "CropStateID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Crop_CropTypeID",
@@ -309,9 +323,9 @@ namespace Tabi.Migrations
                 column: "CropID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Harvest_HarvestStatusID",
+                name: "IX_Harvest_HarvestStateID",
                 table: "Harvest",
-                column: "HarvestStatusID");
+                column: "HarvestStateID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_HarvestPayment_HarvestID",
@@ -339,9 +353,29 @@ namespace Tabi.Migrations
                 column: "SlopeTypeID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_User_DocumentNumber",
+                table: "User",
+                column: "DocumentNumber",
+                unique: true,
+                filter: "[DocumentNumber] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_User_DocumentTypeID",
                 table: "User",
                 column: "DocumentTypeID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_User_Email",
+                table: "User",
+                column: "Email",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_User_Username",
+                table: "User",
+                column: "Username",
+                unique: true,
+                filter: "[Username] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_User_UserTypeID",
@@ -365,10 +399,10 @@ namespace Tabi.Migrations
                 name: "Crop");
 
             migrationBuilder.DropTable(
-                name: "HarvestStatus");
+                name: "HarvestState");
 
             migrationBuilder.DropTable(
-                name: "CropStatus");
+                name: "CropState");
 
             migrationBuilder.DropTable(
                 name: "CropType");

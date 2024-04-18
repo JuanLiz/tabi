@@ -8,56 +8,46 @@ namespace Tabi.Repositories
     public interface IHarvestPaymentRepository
     {
         Task<IEnumerable<HarvestPayment>> GetHarvestPayments();
-        Task<HarvestPayment> GetHarvestPayment(int id);
-        Task<HarvestPayment> PostHarvestPayment(HarvestPayment harvestPayment);
-        Task<HarvestPayment> PutHarvestPayment(int id, HarvestPayment harvestPayment);
-        Task<HarvestPayment> DeleteHarvestPayment(int id);
+        Task<HarvestPayment?> GetHarvestPayment(int id);
+        Task<HarvestPayment> CreateHarvestPayment(HarvestPayment harvestPayment);
+        Task<HarvestPayment> UpdateHarvestPayment(HarvestPayment harvestPayment);
+        Task<HarvestPayment?> DeleteHarvestPayment(int id);
 
     }
 
-    public class HarvestPaymentRepository: IHarvestRepository
+    public class HarvestPaymentRepository(TabiContext db) : IHarvestPaymentRepository
     {
-        private readonly TabiContext _context;
-
-        public HarvestPaymentRepository(TabiContext context)
-        {
-            _context = context;
-        }
-
         public async Task<IEnumerable<HarvestPayment>> GetHarvestPayments()
         {
-            return await _context.HarvestPayments.ToListAsync();
+            return await db.HarvestPayments.ToListAsync();
         }
 
-        public async Task<HarvestPayment> GetHarvestPayment(int id)
+        public async Task<HarvestPayment?> GetHarvestPayment(int id)
         {
-            return await _context.HarvestPayments.FindAsync(id);
+            return await db.HarvestPayments.FindAsync(id);
         }
 
-        public async Task<HarvestPayment> PostHarvestPayment(HarvestPayment harvestPayment)
+        public async Task<HarvestPayment> CreateHarvestPayment(HarvestPayment harvestPayment)
         {
-            _context.HarvestPayments.Add(harvestPayment);
-            await _context.SaveChangesAsync();
+            db.HarvestPayments.Add(harvestPayment);
+            await db.SaveChangesAsync();
             return harvestPayment;
         }
 
-        public async Task<HarvestPayment> PutHarvestPayment(int id, HarvestPayment harvestPayment)
+        public async Task<HarvestPayment> UpdateHarvestPayment(HarvestPayment harvestPayment)
         {
-            _context.Entry(harvestPayment).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+            db.Entry(harvestPayment).State = EntityState.Modified;
+            await db.SaveChangesAsync();
             return harvestPayment;
         }
 
-        public async Task<HarvestPayment> DeleteHarvestPayment(int id)
+        public async Task<HarvestPayment?> DeleteHarvestPayment(int id)
         {
-            var harvestPayment = await _context.HarvestPayments.FindAsync(id);
-            if (harvestPayment == null)
-            {
-                return null;
-            }
-
-            _context.HarvestPayments.Remove(harvestPayment);
-            await _context.SaveChangesAsync();
+            HarvestPayment? harvestPayment = await db.HarvestPayments.FindAsync(id);
+            if (harvestPayment == null) return harvestPayment;
+            harvestPayment.IsActive = false;
+            db.Entry(harvestPayment).State = EntityState.Modified;
+            await db.SaveChangesAsync();
             return harvestPayment;
         }
 

@@ -8,56 +8,46 @@ namespace Tabi.Repositories
     public interface ISlopeTypeRepository
     {
         Task<IEnumerable<SlopeType>> GetSlopeTypes();
-        Task<SlopeType> GetSlopeType(int id);
-        Task<SlopeType> PostSlopeType(SlopeType slopeType);
-        Task<SlopeType> PutSlopeType(int id, SlopeType slopeType);
-        Task<SlopeType> DeleteSlopeType(int id);
+        Task<SlopeType?> GetSlopeType(int id);
+        Task<SlopeType> CreateSlopeType(SlopeType slopeType);
+        Task<SlopeType> UpdateSlopeType(SlopeType slopeType);
+        Task<SlopeType?> DeleteSlopeType(int id);
 
     }
 
-    public class SlopeTypeRepository : ISlopeTypeRepository
+    public class SlopeTypeRepository(TabiContext db) : ISlopeTypeRepository
     {
-        private readonly TabiContext _context;
-
-        public SlopeTypeRepository(TabiContext context)
-        {
-            _context = context;
-        }
-
         public async Task<IEnumerable<SlopeType>> GetSlopeTypes()
         {
-            return await _context.SlopeTypes.ToListAsync();
+            return await db.SlopeTypes.ToListAsync();
         }
 
-        public async Task<SlopeType> GetSlopeType(int id)
+        public async Task<SlopeType?> GetSlopeType(int id)
         {
-            return await _context.SlopeTypes.FindAsync(id);
+            return await db.SlopeTypes.FindAsync(id);
         }
 
-        public async Task<SlopeType> PostSlopeType(SlopeType slopeType)
+        public async Task<SlopeType> CreateSlopeType(SlopeType slopeType)
         {
-            _context.SlopeTypes.Add(slopeType);
-            await _context.SaveChangesAsync();
+            db.SlopeTypes.Add(slopeType);
+            await db.SaveChangesAsync();
             return slopeType;
         }
 
-        public async Task<SlopeType> PutSlopeType(int id, SlopeType slopeType)
+        public async Task<SlopeType> UpdateSlopeType(SlopeType slopeType)
         {
-            _context.Entry(slopeType).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+            db.Entry(slopeType).State = EntityState.Modified;
+            await db.SaveChangesAsync();
             return slopeType;
         }
 
-        public async Task<SlopeType> DeleteSlopeType(int id)
+        public async Task<SlopeType?> DeleteSlopeType(int id)
         {
-            var slopeType = await _context.SlopeTypes.FindAsync(id);
-            if (slopeType == null)
-            {
-                return null;
-            }
-
-            _context.SlopeTypes.Remove(slopeType);
-            await _context.SaveChangesAsync();
+            SlopeType? slopeType = await db.SlopeTypes.FindAsync(id);
+            if (slopeType == null) return slopeType;
+            slopeType.IsActive = false;
+            db.Entry(slopeType).State = EntityState.Modified;
+            await db.SaveChangesAsync();
             return slopeType;
         }
     }

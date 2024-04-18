@@ -7,57 +7,46 @@ namespace Tabi.Repositories
     public interface IUserTypeRepository
     {
         Task<IEnumerable<UserType>> GetUserTypes();
-        Task<UserType> GetUserType(int id);
-        Task<UserType> PostUserType(UserType userType);
-        Task<UserType> PutUserType(int id, UserType userType);
-        Task<UserType> DeleteUserType(int id);
-
+        Task<UserType?> GetUserType(int id);
+        Task<UserType> CreateUserType(UserType userType);
+        Task<UserType> UpdateUserType(UserType userType);
+        Task<UserType?> DeleteUserType(int id);
     }
 
 
-    public class UserTypeRepository : IUserTypeRepository
+    public class UserTypeRepository(TabiContext db) : IUserTypeRepository
     {
-        private readonly TabiContext _context;
-
-        public UserTypeRepository(TabiContext context)
-        {
-            _context = context;
-        }
-
         public async Task<IEnumerable<UserType>> GetUserTypes()
         {
-            return await _context.UserTypes.ToListAsync();
+            return await db.UserTypes.ToListAsync();
         }
 
-        public async Task<UserType> GetUserType(int id)
+        public async Task<UserType?> GetUserType(int id)
         {
-            return await _context.UserTypes.FindAsync(id);
+            return await db.UserTypes.FindAsync(id);
         }
 
-        public async Task<UserType> PostUserType(UserType userType)
+        public async Task<UserType> CreateUserType(UserType userType)
         {
-            _context.UserTypes.Add(userType);
-            await _context.SaveChangesAsync();
+            db.UserTypes.Add(userType);
+            await db.SaveChangesAsync();
             return userType;
         }
 
-        public async Task<UserType> PutUserType(int id, UserType userType)
+        public async Task<UserType> UpdateUserType(UserType userType)
         {
-            _context.Entry(userType).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+            db.Entry(userType).State = EntityState.Modified;
+            await db.SaveChangesAsync();
             return userType;
         }
 
-        public async Task<UserType> DeleteUserType(int id)
+        public async Task<UserType?> DeleteUserType(int id)
         {
-            var userType = await _context.UserTypes.FindAsync(id);
-            if (userType == null)
-            {
-                return null;
-            }
-
-            _context.UserTypes.Remove(userType);
-            await _context.SaveChangesAsync();
+            UserType? userType = await db.UserTypes.FindAsync(id);
+            if (userType == null) return userType;
+            userType.IsActive = false;
+            db.Entry(userType).State = EntityState.Modified;
+            await db.SaveChangesAsync();
             return userType;
         }
     }

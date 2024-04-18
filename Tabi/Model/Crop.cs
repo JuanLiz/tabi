@@ -13,8 +13,8 @@ namespace Tabi.Model
         public required float Hectares { get; set; }
         [ForeignKey(nameof(CropType))]
         public required int CropTypeID { get; set; }
-        [ForeignKey(nameof(CropStatus))]
-        public required int CropStatusID { get; set; }
+        [ForeignKey(nameof(CropState))]
+        public required int CropStateID { get; set; }
         public required DateOnly PlantingDate { get; set; }
         public DateOnly? HarvestDate { get; set; }
         [JsonIgnore]
@@ -23,6 +23,6 @@ namespace Tabi.Model
 
         public virtual Lot? Lot { get; set; }
         public virtual CropType? CropType { get; set; }
-        public virtual CropStatus? CropStatus { get; set; }
+        public virtual CropState? CropState { get; set; }
     }
 }

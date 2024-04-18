@@ -10,15 +10,15 @@ namespace Tabi.Model
         public int HarvestID { get; set; }
         [ForeignKey(nameof(Crop))]
         public required int CropID { get; set; }
-        [ForeignKey(nameof(HarvestStatus))]
-        public required int HarvestStatusID { get; set; }
+        [ForeignKey(nameof(HarvestState))]
+        public required int HarvestStateID { get; set; }
         public required DateOnly Date { get; set; }
         public float? Amount { get; set; }
         [JsonIgnore]
         public bool IsActive { get; set; } = true;
 
         public virtual Crop? Crop { get; set; }
-        public virtual HarvestStatus? HarvestStatus { get; set; }
+        public virtual HarvestState? HarvestState { get; set; }
 
 
     }

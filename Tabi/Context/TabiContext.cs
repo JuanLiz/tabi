@@ -7,13 +7,15 @@ namespace Tabi.Context
     {
         // All DbSet goes here
         public DbSet<Crop> Crops { get; set; }
-        public DbSet<CropStatus> CropStatuses { get; set; }
+        public DbSet<CropState> CropStates { get; set; }
         public DbSet<CropType> CropTypes { get; set; }
+        public DbSet<CropManagement> CropManagements { get; set; }
+        public DbSet<CropManagementType> CropManagementTypes { get; set; }
         public DbSet<DocumentType> DocumentTypes { get; set; }
         public DbSet<Farm> Farms { get; set; }
         public DbSet<Harvest> Harvests { get; set; }
         public DbSet<HarvestPayment> HarvestPayments { get; set; }
-        public DbSet<HarvestStatus> HarvestStatuses { get; set; }
+        public DbSet<HarvestState> HarvestStates { get; set; }
         public DbSet<Lot> Lots { get; set; }
         public DbSet<PaymentType> PaymentTypes { get; set; }
         public DbSet<SlopeType> SlopeTypes { get; set; }
@@ -24,13 +26,15 @@ namespace Tabi.Context
         {
             // Convert to singular table names
             modelBuilder.Entity<Crop>().ToTable("Crop");
-            modelBuilder.Entity<CropStatus>().ToTable("CropStatus");
+            modelBuilder.Entity<CropState>().ToTable("CropState");
             modelBuilder.Entity<CropType>().ToTable("CropType");
+            modelBuilder.Entity<CropManagement>().ToTable("CropManagement");
+            modelBuilder.Entity<CropManagementType>().ToTable("CropManagementType");
             modelBuilder.Entity<DocumentType>().ToTable("DocumentType");
             modelBuilder.Entity<Farm>().ToTable("Farm");
             modelBuilder.Entity<Harvest>().ToTable("Harvest");
             modelBuilder.Entity<HarvestPayment>().ToTable("HarvestPayment");
-            modelBuilder.Entity<HarvestStatus>().ToTable("HarvestStatus");
+            modelBuilder.Entity<HarvestState>().ToTable("HarvestState");
             modelBuilder.Entity<Lot>().ToTable("Lot");
             modelBuilder.Entity<PaymentType>().ToTable("PaymentType");
             modelBuilder.Entity<SlopeType>().ToTable("SlopeType");
