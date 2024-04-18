@@ -115,7 +115,7 @@ namespace Tabi.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(20)
+                        .HasMaxLength(30)
                         .HasColumnType("nvarchar(20)");
 
                     b.HasKey("CropManagementTypeID");
@@ -136,7 +136,7 @@ namespace Tabi.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(20)
+                        .HasMaxLength(30)
                         .HasColumnType("nvarchar(20)");
 
                     b.HasKey("CropStateID");
@@ -181,7 +181,7 @@ namespace Tabi.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(20)
+                        .HasMaxLength(30)
                         .HasColumnType("nvarchar(20)");
 
                     b.HasKey("DocumentTypeID");
@@ -307,7 +307,7 @@ namespace Tabi.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(20)
+                        .HasMaxLength(30)
                         .HasColumnType("nvarchar(20)");
 
                     b.HasKey("HarvestStateID");
@@ -382,7 +382,7 @@ namespace Tabi.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(20)
+                        .HasMaxLength(30)
                         .HasColumnType("nvarchar(20)");
 
                     b.HasKey("SlopeTypeID");
@@ -476,7 +476,7 @@ namespace Tabi.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(20)
+                        .HasMaxLength(30)
                         .HasColumnType("nvarchar(20)");
 
                     b.HasKey("UserTypeID");

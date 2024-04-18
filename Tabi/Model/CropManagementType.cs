@@ -7,7 +7,7 @@ namespace Tabi.Model
     {
         [Key]
         public int CropManagementTypeID { get; set; }
-        [MaxLength(20)]
+        [MaxLength(30)]
         public required string Name { get; set; }
         [JsonIgnore]
         public bool IsActive { get; set; } = true;

@@ -13,7 +13,7 @@ namespace Tabi.Model
         [ForeignKey(nameof(HarvestState))]
         public required int HarvestStateID { get; set; }
         public required DateOnly Date { get; set; }
-        public float? Amount { get; set; }
+        public required float Amount { get; set; }
         [JsonIgnore]
         public bool IsActive { get; set; } = true;
 

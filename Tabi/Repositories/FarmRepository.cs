@@ -15,7 +15,7 @@ namespace Tabi.Repositories
 
     }
 
-    public class FarmRepository(TabiContext db)
+    public class FarmRepository(TabiContext db) : IFarmRepository
     {
         public async Task<IEnumerable<Farm>> GetFarms()
         {
