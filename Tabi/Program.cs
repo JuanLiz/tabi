@@ -52,7 +52,6 @@ builder.Services.AddScoped<ISlopeTypeService, SlopeTypeService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserTypeService, UserTypeService>();
 
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
