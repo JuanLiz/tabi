@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using Tabi.Context;
-using Tabi.Model;
 using Tabi.Repositories;
 using Tabi.Services;
 using static Tabi.Services.ICropService;
