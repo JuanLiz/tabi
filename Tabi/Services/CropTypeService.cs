@@ -9,9 +9,9 @@ namespace Tabi.Services
         Task<IEnumerable<CropType>> GetCropTypes();
         Task<CropType?> GetCropType(int id);
 
-        Task<CropType> CreateCropType(string Name);
+        Task<CropType> CreateCropType(string Name, float ExpectedYield);
 
-        Task<CropType> UpdateCropType(int CropTypeID, string? Name);
+        Task<CropType> UpdateCropType(int CropTypeID, string? Name, float? ExpectedYield);
         Task<CropType?> DeleteCropType(int id);
 
     }
@@ -28,17 +28,18 @@ namespace Tabi.Services
             return await cropTypeRepository.GetCropType(id);
         }
 
-        public async Task<CropType> CreateCropType(string Name)
+        public async Task<CropType> CreateCropType(string Name, float ExpectedYield)
         {
-            CropType cropType = new() { Name = Name };
+            CropType cropType = new() { Name = Name, ExpectedYield = ExpectedYield };
             return await cropTypeRepository.CreateCropType(cropType);
         }
 
-        public async Task<CropType> UpdateCropType(int CropTypeID, string? Name)
+        public async Task<CropType> UpdateCropType(int CropTypeID, string? Name, float? ExpectedYield)
         {
             CropType? cropType = await cropTypeRepository.GetCropType(CropTypeID);
             if (cropType == null) throw new Exception("CropType not found");
             cropType.Name = Name ?? cropType.Name;
+            cropType.ExpectedYield = ExpectedYield ?? cropType.ExpectedYield;
             return await cropTypeRepository.UpdateCropType(cropType);
         }
 

@@ -9,7 +9,7 @@ namespace Tabi.Model
         public int CropTypeID { get; set; }
         [MaxLength(30)]
         public required string Name { get; set; }
-        public float ExpectedYield { get; set; }
+        public required float ExpectedYield { get; set; }
         [JsonIgnore]
         public bool IsActive { get; set; } = true;
     }

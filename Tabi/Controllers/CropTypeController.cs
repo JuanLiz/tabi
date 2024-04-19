@@ -27,20 +27,22 @@ namespace Tabi.Controllers
 
         [HttpPost]
         public async Task<IActionResult> CreateCropType(
-            [Required] [MaxLength(30)] string Name)
+            [Required] [MaxLength(30)] string Name,
+            [Required] float ExpectedYield)
         {
-            CropType cropType = await cropTypeService.CreateCropType(Name);
+            CropType cropType = await cropTypeService.CreateCropType(Name, ExpectedYield);
             return CreatedAtAction(nameof(GetCropType), new { id = cropType.CropTypeID }, cropType);
         }
 
         [HttpPut]
         public async Task<IActionResult> UpdateCropType(
             [Required] int CropTypeID,
-            [MaxLength(30)] string? Name)
+            [MaxLength(30)] string? Name,
+            float? ExpectedYield)
         {
             CropType? cropType = await cropTypeService.GetCropType(CropTypeID);
             if (cropType == null) return NotFound();
-            cropType = await cropTypeService.UpdateCropType(CropTypeID, Name);
+            cropType = await cropTypeService.UpdateCropType(CropTypeID, Name, ExpectedYield);
             return Ok(cropType);
         }
 
