@@ -5,7 +5,8 @@ on:
     branches: [ master ]
 
 jobs:
-  deployment:
+  build-and-push:
+    environment: deployment
     runs-on: ubuntu-latest
 
     steps:
