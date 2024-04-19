@@ -16,6 +16,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
 // Add scoped repositories
 builder.Services.AddScoped<ICropRepository, CropRepository>();
 builder.Services.AddScoped<ICropManagementRepository, CropManagementRepository>();
@@ -54,11 +55,8 @@ builder.Services.AddScoped<IUserTypeService, UserTypeService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
