@@ -28,5 +28,4 @@ jobs:
         with:
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.REPOSITORY_NAME }}:latest
-          secrets: |
-            DATABASE_CONNECTION=${{ secrets.DATABASE_CONNECTION }}
+         
