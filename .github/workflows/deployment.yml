@@ -22,7 +22,7 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           script: |
             #!/bin/bash
-            if [ "$(docker ps -a -q -f name=tabi-server-container)" ]; then
+            if [ "$(sudo docker ps -a -q -f name=tabi-server-container)" ]; then
                 sudo docker kill tabi-server-container
                 sudo docker rm tabi-server-container
                 sudo docker rmi tabi-server -f
