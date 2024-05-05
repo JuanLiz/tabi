@@ -21,9 +21,12 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            sudo docker kill tabi-server-container
-            sudo docker rm tabi-server-container
-            sudo docker rmi tabi-server -f
-            cd tabi && git pull
-            sudo docker build -t tabi-server .
-            sudo docker run -d -it -p 8080:8080 -e \"ConnectionStrings__DefaultConnection\"=\"${TABI_CONNECTION_STRING}\" --name tabi-server
+            if [ "$(docker ps -a -q -f name=<name>)" ]; then
+                sudo docker kill tabi-server-container
+                sudo docker rm tabi-server-container
+                sudo docker rmi tabi-server -f
+                docker run -d --name <name> my-docker-image
+                cd tabi && git pull
+                sudo docker build -t tabi-server .
+                sudo docker run -d -it -p 8080:8080 -e "ConnectionStrings__DefaultConnection"="\$\{TABI_CONNECTION_STRING\}" --name tabi-server
+            fi
