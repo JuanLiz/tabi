@@ -29,4 +29,4 @@ jobs:
             fi
             cd tabi && git pull
             sudo docker build -t tabi-server .
-            sudo docker run -d -it -p 8080:8080 -e "ConnectionStrings__DefaultConnection"="\$\{TABI_CONNECTION_STRING\}" --name tabi-server
+            sudo docker run -d -it -p 8080:8080 -e \"ConnectionStrings__DefaultConnection\"=\"\$\{TABI_CONNECTION_STRING\}\" --name tabi-server
