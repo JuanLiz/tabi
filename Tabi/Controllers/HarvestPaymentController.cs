@@ -27,6 +27,7 @@ namespace Tabi.Controllers
 
         [HttpPost]
         public async Task<IActionResult> CreateHarvestPayment(
+            [FromForm]
             [Required] int HarvestID,
             [Required] int UserID,
             [Required] float HarvestedAmount,
@@ -40,6 +41,7 @@ namespace Tabi.Controllers
 
         [HttpPut]
         public async Task<IActionResult> UpdateHarvestPayment(
+            [FromForm]
             [Required] int HarvestPaymentID,
             int? HarvestID,
             int? UserID,

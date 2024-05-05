@@ -27,6 +27,7 @@ namespace Tabi.Controllers
 
         [HttpPost]
         public async Task<IActionResult> CreateCropManagement(
+            [FromForm]
             [Required] int CropID,
             [Required] int CropManagementTypeID,
             [Required] DateOnly Date,
@@ -38,6 +39,7 @@ namespace Tabi.Controllers
 
         [HttpPut]
         public async Task<IActionResult> UpdateCropManagement(
+            [FromForm]
             [Required] int CropManagementID,
             int? CropID,
             int? CropManagementTypeID,

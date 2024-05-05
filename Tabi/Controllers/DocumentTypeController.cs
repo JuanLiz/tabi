@@ -27,6 +27,7 @@ namespace Tabi.Controllers
 
         [HttpPost]
         public async Task<IActionResult> CreateDocumentType(
+            [FromForm]
             [Required][MaxLength(30)] string Name)
         {
             DocumentType documentType = await documentTypeService.CreateDocumentType(Name);
@@ -35,6 +36,7 @@ namespace Tabi.Controllers
 
         [HttpPut]
         public async Task<IActionResult> UpdateDocumentType(
+            [FromForm]
             [Required] int DocumentTypeID,
             [MaxLength(30)] string? Name)
         {

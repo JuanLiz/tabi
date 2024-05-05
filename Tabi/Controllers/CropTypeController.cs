@@ -27,6 +27,7 @@ namespace Tabi.Controllers
 
         [HttpPost]
         public async Task<IActionResult> CreateCropType(
+            [FromForm]
             [Required] [MaxLength(30)] string Name,
             [Required] float ExpectedYield)
         {
@@ -36,6 +37,7 @@ namespace Tabi.Controllers
 
         [HttpPut]
         public async Task<IActionResult> UpdateCropType(
+            [FromForm]
             [Required] int CropTypeID,
             [MaxLength(30)] string? Name,
             float? ExpectedYield)

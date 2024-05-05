@@ -27,6 +27,7 @@ namespace Tabi.Controllers
 
         [HttpPost]
         public async Task<IActionResult> CreateHarvestState(
+            [FromForm]
             [Required] [MaxLength(30)] string Name)
         {
             HarvestState harvestState = await harvestStateService.CreateHarvestState(Name);
@@ -35,6 +36,7 @@ namespace Tabi.Controllers
 
         [HttpPut]
         public async Task<IActionResult> UpdateHarvestState(
+            [FromForm]
             [Required] int HarvestStateID,
             [MaxLength(30)] string? Name)
         {

@@ -27,6 +27,7 @@ namespace Tabi.Controllers
 
         [HttpPost]
         public async Task<IActionResult> CreateSlopeType(
+            [FromForm]
             [Required][MaxLength(30)] string Name)
         {
             SlopeType slopeType = await slopeTypeService.CreateSlopeType(Name);
@@ -35,6 +36,7 @@ namespace Tabi.Controllers
 
         [HttpPut]
         public async Task<IActionResult> UpdateSlopeType(
+            [FromForm]
             [Required] int SlopeTypeID,
             [MaxLength(30)] string? Name)
         {

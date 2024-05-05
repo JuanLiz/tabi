@@ -27,6 +27,7 @@ namespace Tabi.Controllers
 
         [HttpPost]
         public async Task<IActionResult> CreateUserType(
+            [FromForm]
             [Required][MaxLength(30)] string Name)
         {
             UserType userType = await userTypeService.CreateUserType(Name);
@@ -35,6 +36,7 @@ namespace Tabi.Controllers
 
         [HttpPut]
         public async Task<IActionResult> UpdateUserType(
+            [FromForm]
             [Required] int UserTypeID,
             [MaxLength(30)] string? Name)
         {

@@ -27,6 +27,7 @@ namespace Tabi.Controllers
 
         [HttpPost]
         public async Task<IActionResult> CreateHarvest(
+            [FromForm]
             [Required] int CropID,
             [Required] int HarvestStateID,
             [Required] DateOnly Date,
@@ -38,6 +39,7 @@ namespace Tabi.Controllers
 
         [HttpPut]
         public async Task<IActionResult> UpdateHarvest(
+            [FromForm]
             [Required] int HarvestID,
             int? CropID,
             int? HarvestStateID,

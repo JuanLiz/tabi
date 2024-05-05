@@ -26,6 +26,7 @@ namespace Tabi.Controllers
 
         [HttpPost]
         public async Task<IActionResult> CreateCrop(
+            [FromForm]
             [Required] int LotID,
             [Required] float Hectares,
             [Required] int CropTypeID,
@@ -40,6 +41,7 @@ namespace Tabi.Controllers
 
         [HttpPut]
         public async Task<IActionResult> UpdateCrop(
+            [FromForm]
             [Required] int CropID,
             int? LotID,
             float? Hectares,

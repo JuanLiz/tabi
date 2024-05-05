@@ -27,6 +27,7 @@ namespace Tabi.Controllers
 
         [HttpPost]
         public async Task<IActionResult> CreateFarm(
+            [FromForm]
             [Required] int UserID,
             [Required][MaxLength(30)] string Name,
             [MaxLength(50)] string? Address,
@@ -39,6 +40,7 @@ namespace Tabi.Controllers
 
         [HttpPut]
         public async Task<IActionResult> UpdateFarm(
+            [FromForm]
             [Required] int FarmID,
             int? UserID,
             [MaxLength(30)] string? Name,

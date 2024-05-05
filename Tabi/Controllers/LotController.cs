@@ -27,6 +27,7 @@ namespace Tabi.Controllers
 
         [HttpPost]
         public async Task<IActionResult> CreateLot(
+            [FromForm]
             [Required] int FarmID,
             [Required][MaxLength(30)] string Name,
             [Required] float Hectares,
@@ -38,6 +39,7 @@ namespace Tabi.Controllers
 
         [HttpPut]
         public async Task<IActionResult> UpdateLot(
+            [FromForm]
             [Required] int LotID,
             int? FarmID,
             [MaxLength(30)] string? Name,

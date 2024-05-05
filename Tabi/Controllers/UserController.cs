@@ -27,6 +27,7 @@ namespace Tabi.Controllers
 
         [HttpPost]
         public async Task<IActionResult> CreateUser(
+            [FromForm]
             [Required] int UserTypeID,
             [Required][MaxLength(30)] string Name,
             [Required][MaxLength(30)] string LastName,
@@ -47,6 +48,7 @@ namespace Tabi.Controllers
 
         [HttpPut]
         public async Task<IActionResult> UpdateUser(
+            [FromForm]
             [Required] int UserID,
             int? UserTypeID,
             [MaxLength(30)] string? Name,
