@@ -27,20 +27,19 @@ namespace Tabi.Controllers
 
         [HttpPost]
         public async Task<IActionResult> CreateUser(
-            [FromForm]
-            [Required] int UserTypeID,
-            [Required][MaxLength(30)] string Name,
-            [Required][MaxLength(30)] string LastName,
-            int? DocumentTypeID,
-            [MaxLength(10)] string? DocumentNumber,
-            [MaxLength(12)] string? Username,
-            [Required] [MaxLength(320)] [EmailAddress(ErrorMessage = "Invalid email address")]
+            [FromForm][Required] int UserTypeID,
+            [FromForm][Required][MaxLength(30)] string Name,
+            [FromForm][Required][MaxLength(30)] string LastName,
+            [FromForm] int? DocumentTypeID,
+            [FromForm][MaxLength(10)] string? DocumentNumber,
+            [FromForm][MaxLength(12)] string? Username,
+            [FromForm][Required][MaxLength(320)][EmailAddress(ErrorMessage = "Invalid email address")]
             string Email,
-            [Required][MaxLength(30)] string Password,
-            [Length(10, 10, ErrorMessage = "Phone number must be 10 digits")]
+            [FromForm][Required][MaxLength(30)] string Password,
+            [FromForm][Length(10, 10, ErrorMessage = "Phone number must be 10 digits")]
             [Phone(ErrorMessage = "Invalid phone number")]
             string? Phone,
-            [MaxLength(50)] string? Address)
+            [FromForm][MaxLength(50)] string? Address)
         {
             User user = await userService.CreateUser(UserTypeID, Name, LastName, DocumentTypeID, DocumentNumber, Username, Email, Password, Phone, Address);
             return CreatedAtAction(nameof(GetUser), new { id = user.UserID }, user);
@@ -48,21 +47,20 @@ namespace Tabi.Controllers
 
         [HttpPut]
         public async Task<IActionResult> UpdateUser(
-            [FromForm]
-            [Required] int UserID,
-            int? UserTypeID,
-            [MaxLength(30)] string? Name,
-            [MaxLength(30)] string? LastName,
-            int? DocumentTypeID,
-            [MaxLength(10)] string? DocumentNumber,
-            [MaxLength(12)] string? Username,
-            [MaxLength(320)] [EmailAddress(ErrorMessage = "Invalid email address")]
+            [FromForm][Required] int UserID,
+            [FromForm] int? UserTypeID,
+            [FromForm][MaxLength(30)] string? Name,
+            [FromForm][MaxLength(30)] string? LastName,
+            [FromForm] int? DocumentTypeID,
+            [FromForm][MaxLength(10)] string? DocumentNumber,
+            [FromForm][MaxLength(12)] string? Username,
+            [FromForm] [MaxLength(320)] [EmailAddress(ErrorMessage = "Invalid email address")]
             string? Email,
-            [MaxLength(30)] string? Password,
-            [Length(10, 10, ErrorMessage = "Phone number must be 10 digits")]
+            [FromForm][MaxLength(30)] string? Password,
+            [FromForm] [Length(10, 10, ErrorMessage = "Phone number must be 10 digits")]
             [Phone(ErrorMessage = "Invalid phone number")]
             string? Phone,
-            [MaxLength(50)] string? Address)
+            [FromForm][MaxLength(50)] string? Address)
         {
             User? user = await userService.GetUser(UserID);
             if (user == null) return NotFound();

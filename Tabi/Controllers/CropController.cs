@@ -26,13 +26,12 @@ namespace Tabi.Controllers
 
         [HttpPost]
         public async Task<IActionResult> CreateCrop(
-            [FromForm]
-            [Required] int LotID,
-            [Required] float Hectares,
-            [Required] int CropTypeID,
-            [Required] int CropStateID,
-            [Required] DateOnly PlantingDate,
-            DateOnly? HarvestDate
+            [FromForm][Required] int LotID,
+            [FromForm][Required] float Hectares,
+            [FromForm][Required] int CropTypeID,
+            [FromForm][Required] int CropStateID,
+            [FromForm][Required] DateOnly PlantingDate,
+            [FromForm] DateOnly? HarvestDate
             )
         {
             Crop crop = await cropService.CreateCrop(LotID, Hectares, CropTypeID, CropStateID, PlantingDate, HarvestDate);
@@ -41,14 +40,13 @@ namespace Tabi.Controllers
 
         [HttpPut]
         public async Task<IActionResult> UpdateCrop(
-            [FromForm]
-            [Required] int CropID,
-            int? LotID,
-            float? Hectares,
-            int? CropTypeID,
-            int? CropStateID,
-            DateOnly? PlantingDate,
-            DateOnly? HarvestDate
+            [FromForm][Required] int CropID,
+            [FromForm] int? LotID,
+            [FromForm] float? Hectares,
+            [FromForm] int? CropTypeID,
+            [FromForm] int? CropStateID,
+            [FromForm] DateOnly? PlantingDate,
+            [FromForm] DateOnly? HarvestDate
         )
         {
             Crop? crop = await cropService.GetCrop(CropID);

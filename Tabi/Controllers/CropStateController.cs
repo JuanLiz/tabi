@@ -27,8 +27,7 @@ namespace Tabi.Controllers
 
         [HttpPost]
         public async Task<IActionResult> CreateCropState(
-            [FromForm]
-            [Required] [MaxLength(30)] string Name)
+            [FromForm][Required][MaxLength(30)] string Name)
         {
             CropState cropState = await cropStateService.CreateCropState(Name);
             return CreatedAtAction(nameof(GetCropState), new { id = cropState.CropStateID }, cropState);
@@ -36,9 +35,8 @@ namespace Tabi.Controllers
 
         [HttpPut]
         public async Task<IActionResult> UpdateCropState(
-            [FromForm]
-            [Required] int CropStateID,
-            [MaxLength(30)] string? Name)
+            [FromForm][Required] int CropStateID,
+            [FromForm][MaxLength(30)] string? Name)
         {
             CropState? cropState = await cropStateService.GetCropState(CropStateID);
             if (cropState == null) return NotFound();

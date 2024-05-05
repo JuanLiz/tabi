@@ -27,11 +27,10 @@ namespace Tabi.Controllers
 
         [HttpPost]
         public async Task<IActionResult> CreateFarm(
-            [FromForm]
-            [Required] int UserID,
-            [Required][MaxLength(30)] string Name,
-            [MaxLength(50)] string? Address,
-            [Required] float Hectares
+            [FromForm][Required] int UserID,
+            [FromForm][Required][MaxLength(30)] string Name,
+            [FromForm][MaxLength(50)] string? Address,
+            [FromForm][Required] float Hectares
         )
         {
             Farm farm = await farmService.CreateFarm(UserID, Name, Address, Hectares);
@@ -40,12 +39,11 @@ namespace Tabi.Controllers
 
         [HttpPut]
         public async Task<IActionResult> UpdateFarm(
-            [FromForm]
-            [Required] int FarmID,
-            int? UserID,
-            [MaxLength(30)] string? Name,
-            [MaxLength(50)] string? Address,
-            float? Hectares
+            [FromForm][Required] int FarmID,
+            [FromForm] int? UserID,
+            [FromForm][MaxLength(30)] string? Name,
+            [FromForm][MaxLength(50)] string? Address,
+            [FromForm] float? Hectares
         )
         {
             Farm? farm = await farmService.GetFarm(FarmID);

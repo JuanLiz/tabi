@@ -27,13 +27,12 @@ namespace Tabi.Controllers
 
         [HttpPost]
         public async Task<IActionResult> CreateHarvestPayment(
-            [FromForm]
-            [Required] int HarvestID,
-            [Required] int UserID,
-            [Required] float HarvestedAmount,
-            [Required] int PaymentTypeID,
-            [Required] float PaymentAmount,
-            [Required] DateOnly PaymentDate)
+            [FromForm][Required] int HarvestID,
+            [FromForm][Required] int UserID,
+            [FromForm][Required] float HarvestedAmount,
+            [FromForm][Required] int PaymentTypeID,
+            [FromForm][Required] float PaymentAmount,
+            [FromForm][Required] DateOnly PaymentDate)
         {
             HarvestPayment harvestPayment = await harvestPaymentService.CreateHarvestPayment(HarvestID, UserID, HarvestedAmount, PaymentTypeID, PaymentAmount, PaymentDate);
             return CreatedAtAction(nameof(GetHarvestPayment), new { id = harvestPayment.HarvestPaymentID }, harvestPayment);
@@ -41,14 +40,13 @@ namespace Tabi.Controllers
 
         [HttpPut]
         public async Task<IActionResult> UpdateHarvestPayment(
-            [FromForm]
-            [Required] int HarvestPaymentID,
-            int? HarvestID,
-            int? UserID,
-            float? HarvestedAmount,
-            int? PaymentTypeID,
-            float? PaymentAmount,
-            DateOnly? PaymentDate)
+            [FromForm][Required] int HarvestPaymentID,
+            [FromForm] int? HarvestID,
+            [FromForm] int? UserID,
+            [FromForm] float? HarvestedAmount,
+            [FromForm] int? PaymentTypeID,
+            [FromForm] float? PaymentAmount,
+            [FromForm] DateOnly? PaymentDate)
         {
             HarvestPayment? harvestPayment = await harvestPaymentService.GetHarvestPayment(HarvestPaymentID);
             if (harvestPayment == null) return NotFound();

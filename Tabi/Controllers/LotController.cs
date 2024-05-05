@@ -27,11 +27,10 @@ namespace Tabi.Controllers
 
         [HttpPost]
         public async Task<IActionResult> CreateLot(
-            [FromForm]
-            [Required] int FarmID,
-            [Required][MaxLength(30)] string Name,
-            [Required] float Hectares,
-            [Required] int SlopeTypeID)
+            [FromForm][Required] int FarmID,
+            [FromForm][Required][MaxLength(30)] string Name,
+            [FromForm][Required] float Hectares,
+            [FromForm][Required] int SlopeTypeID)
         {
             Lot lot = await lotService.CreateLot(FarmID, Name, Hectares, SlopeTypeID);
             return CreatedAtAction(nameof(GetLot), new { id = lot.LotID }, lot);
@@ -39,12 +38,11 @@ namespace Tabi.Controllers
 
         [HttpPut]
         public async Task<IActionResult> UpdateLot(
-            [FromForm]
-            [Required] int LotID,
-            int? FarmID,
-            [MaxLength(30)] string? Name,
-            float? Hectares,
-            int? SlopeTypeID)
+            [FromForm][Required] int LotID,
+            [FromForm] int? FarmID,
+            [FromForm][MaxLength(30)] string? Name,
+            [FromForm] float? Hectares,
+            [FromForm] int? SlopeTypeID)
         {
             Lot? lot = await lotService.GetLot(LotID);
             if (lot == null) return NotFound();

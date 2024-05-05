@@ -27,9 +27,8 @@ namespace Tabi.Controllers
 
         [HttpPost]
         public async Task<IActionResult> CreateCropType(
-            [FromForm]
-            [Required] [MaxLength(30)] string Name,
-            [Required] float ExpectedYield)
+            [FromForm][Required][MaxLength(30)] string Name,
+            [FromForm][Required] float ExpectedYield)
         {
             CropType cropType = await cropTypeService.CreateCropType(Name, ExpectedYield);
             return CreatedAtAction(nameof(GetCropType), new { id = cropType.CropTypeID }, cropType);
@@ -37,10 +36,9 @@ namespace Tabi.Controllers
 
         [HttpPut]
         public async Task<IActionResult> UpdateCropType(
-            [FromForm]
-            [Required] int CropTypeID,
-            [MaxLength(30)] string? Name,
-            float? ExpectedYield)
+            [FromForm][Required] int CropTypeID,
+            [FromForm][MaxLength(30)] string? Name,
+            [FromForm] float? ExpectedYield)
         {
             CropType? cropType = await cropTypeService.GetCropType(CropTypeID);
             if (cropType == null) return NotFound();

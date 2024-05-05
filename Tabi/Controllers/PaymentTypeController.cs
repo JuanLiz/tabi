@@ -27,8 +27,7 @@ namespace Tabi.Controllers
 
         [HttpPost]
         public async Task<IActionResult> CreatePaymentType(
-            [FromForm]
-            [Required] [MaxLength(30)] string Name)
+            [FromForm][Required][MaxLength(30)] string Name)
         {
             PaymentType paymentType = await paymentTypeService.CreatePaymentType(Name);
             return CreatedAtAction(nameof(GetPaymentType), new { id = paymentType.PaymentTypeID }, paymentType);
@@ -36,9 +35,8 @@ namespace Tabi.Controllers
 
         [HttpPut]
         public async Task<IActionResult> UpdatePaymentType(
-            [FromForm]
-            [Required] int PaymentTypeID,
-            [MaxLength(30)] string? Name)
+            [FromForm][Required] int PaymentTypeID,
+            [FromForm][MaxLength(30)] string? Name)
         {
             PaymentType? paymentType = await paymentTypeService.GetPaymentType(PaymentTypeID);
             if (paymentType == null) return NotFound();

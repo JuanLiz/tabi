@@ -27,11 +27,10 @@ namespace Tabi.Controllers
 
         [HttpPost]
         public async Task<IActionResult> CreateHarvest(
-            [FromForm]
-            [Required] int CropID,
-            [Required] int HarvestStateID,
-            [Required] DateOnly Date,
-            [Required] float Amount)
+            [FromForm][Required] int CropID,
+            [FromForm][Required] int HarvestStateID,
+            [FromForm][Required] DateOnly Date,
+            [FromForm][Required] float Amount)
         {
             Harvest harvest = await harvestService.CreateHarvest(CropID, HarvestStateID, Date, Amount);
             return CreatedAtAction(nameof(GetHarvest), new { id = harvest.HarvestID }, harvest);
@@ -39,12 +38,11 @@ namespace Tabi.Controllers
 
         [HttpPut]
         public async Task<IActionResult> UpdateHarvest(
-            [FromForm]
-            [Required] int HarvestID,
-            int? CropID,
-            int? HarvestStateID,
-            DateOnly? Date,
-            float? Amount)
+            [FromForm][Required] int HarvestID,
+            [FromForm] int? CropID,
+            [FromForm] int? HarvestStateID,
+            [FromForm] DateOnly? Date,
+            [FromForm] float? Amount)
         {
             Harvest? harvest = await harvestService.GetHarvest(HarvestID);
             if (harvest == null) return NotFound();

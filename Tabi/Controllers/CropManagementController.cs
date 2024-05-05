@@ -27,11 +27,10 @@ namespace Tabi.Controllers
 
         [HttpPost]
         public async Task<IActionResult> CreateCropManagement(
-            [FromForm]
-            [Required] int CropID,
-            [Required] int CropManagementTypeID,
-            [Required] DateOnly Date,
-            [Required][MaxLength(int.MaxValue)] string Description)
+            [FromForm][Required] int CropID,
+            [FromForm][Required] int CropManagementTypeID,
+            [FromForm][Required] DateOnly Date,
+            [FromForm][Required][MaxLength(int.MaxValue)] string Description)
         {
             CropManagement cropManagement = await cropManagementService.CreateCropManagement(CropID, CropManagementTypeID, Date, Description);
             return CreatedAtAction(nameof(GetCropManagement), new { id = cropManagement.CropManagementID }, cropManagement);
@@ -39,12 +38,11 @@ namespace Tabi.Controllers
 
         [HttpPut]
         public async Task<IActionResult> UpdateCropManagement(
-            [FromForm]
-            [Required] int CropManagementID,
-            int? CropID,
-            int? CropManagementTypeID,
-            DateOnly? Date,
-            [MaxLength(int.MaxValue)] string? Description)
+            [FromForm][Required] int CropManagementID,
+            [FromForm] int? CropID,
+            [FromForm] int? CropManagementTypeID,
+            [FromForm] DateOnly? Date,
+            [FromForm][MaxLength(int.MaxValue)] string? Description)
         {
             CropManagement? cropManagement = await cropManagementService.GetCropManagement(CropManagementID);
             if (cropManagement == null) return NotFound();
