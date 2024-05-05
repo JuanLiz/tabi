@@ -1,4 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 using Tabi.Context;
 using Tabi.Model;
 
@@ -7,15 +12,57 @@ namespace Tabi.Repositories
 
     public interface IUserRepository
     {
+        Task<AuthResponse?> Authenticate(AuthRequest authRequest);
         Task<IEnumerable<User>> GetUsers();
         Task<User?> GetUser(int id);
+        Task<User?> GetUser(string? username = null, string? email = null);
         Task<User> CreateUser(User user);
         Task<User> UpdateUser(User user);
         Task<User?> DeleteUser(int id);
     }
 
-    public class UserRepository(TabiContext db) : IUserRepository
+    public class UserRepository(IOptions<AuthSettings> authSettings, TabiContext db) : IUserRepository
     {
+
+        private readonly AuthSettings authSettings = authSettings.Value;
+
+
+        public async Task<AuthResponse?> Authenticate(AuthRequest authRequest)
+        {
+            // Check for username or email
+            User? user = await db.Users.FirstOrDefaultAsync(u =>
+                (u.Username == authRequest.Username || u.Email == authRequest.Email)
+                && u.Password == authRequest.Password);
+            
+            if (user == null) return null;
+
+            // Generate JWT
+            string token = await GenerateJwtToken(user);
+
+            return new AuthResponse(user, token);
+        }
+
+        // helper methods
+        private async Task<string> GenerateJwtToken(User user)
+        {
+            //Generate token that is valid for 7 days
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var token = await Task.Run(() =>
+            {
+
+                var key = Encoding.ASCII.GetBytes(authSettings.Secret);
+                var tokenDescriptor = new SecurityTokenDescriptor
+                {
+                    Subject = new ClaimsIdentity(new[] { new Claim("id", user.UserID.ToString()) }),
+                    Expires = DateTime.UtcNow.AddDays(7),
+                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                };
+                return tokenHandler.CreateToken(tokenDescriptor);
+            });
+
+            return tokenHandler.WriteToken(token);
+        }
+
         public async Task<IEnumerable<User>> GetUsers()
         {
             return await db.Users.ToListAsync();
@@ -24,6 +71,15 @@ namespace Tabi.Repositories
         public async Task<User?> GetUser(int id)
         {
             return await db.Users.FindAsync(id);
+        }
+
+        public async Task<User?> GetUser(string? username = null, string? email = null)
+        {
+            if (username != null)
+                return await db.Users.FirstOrDefaultAsync(u => u.Username == username);
+            if (email != null)
+                return await db.Users.FirstOrDefaultAsync(u => u.Email == email);
+            return null;
         }
 
         public async Task<User> CreateUser(User user)

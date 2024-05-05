@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Tabi.Context;
 
@@ -11,9 +12,11 @@ using Tabi.Context;
 namespace Tabi.Migrations
 {
     [DbContext(typeof(TabiContext))]
-    partial class TabiContextModelSnapshot : ModelSnapshot
+    [Migration("20240505195005_UpdateUserIndexes")]
+    partial class UpdateUserIndexes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

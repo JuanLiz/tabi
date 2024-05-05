@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Tabi.Model
 {
-    [Index(nameof(Username), IsUnique = true)]
-    [Index(nameof(Email), IsUnique = true)]
-    [Index(nameof(DocumentNumber), IsUnique = true)]
+    [Index(nameof(Username), IsUnique = false)]
+    [Index(nameof(Email), IsUnique = false)]
+    [Index(nameof(DocumentNumber), IsUnique = false)]
     public class User
     {
         [Key]
@@ -28,7 +28,8 @@ namespace Tabi.Model
         public required string Email { get; set; }
         [MinLength(6)]
         [MaxLength(128)]
-        public required string Password { get; set; }
+        [JsonIgnore]
+        public string Password { get; set; } = null!;
         [MaxLength(10)]
         public string? Phone { get; set; }
         [MaxLength(50)]

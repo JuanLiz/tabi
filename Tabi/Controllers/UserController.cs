@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
+using Tabi.Helpers;
 using Tabi.Model;
 using Tabi.Services;
 
@@ -8,6 +9,7 @@ namespace Tabi.Controllers
 
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UserController(IUserService userService) : ControllerBase
     {
         [HttpGet]
@@ -41,6 +43,7 @@ namespace Tabi.Controllers
             string? Phone,
             [FromForm][MaxLength(50)] string? Address)
         {
+            // TODO - Check if user in same role or username already exists
             User user = await userService.CreateUser(UserTypeID, Name, LastName, DocumentTypeID, DocumentNumber, Username, Email, Password, Phone, Address);
             return CreatedAtAction(nameof(GetUser), new { id = user.UserID }, user);
         }

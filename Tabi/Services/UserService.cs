@@ -6,8 +6,11 @@ namespace Tabi.Services
 
     public interface IUserService
     {
+
+        Task<AuthResponse?> Authenticate(AuthRequest authRequest);
         Task<IEnumerable<User>> GetUsers();
         Task<User?> GetUser(int id);
+        Task<User?> GetUser(string? username = null, string? email = null);
 
         Task<User> CreateUser(
             int UserTypeID,
@@ -38,6 +41,12 @@ namespace Tabi.Services
 
     public class UserService(IUserRepository userRepository) : IUserService
     {
+
+        public async Task<AuthResponse?> Authenticate(AuthRequest authRequest)
+        {
+            return await userRepository.Authenticate(authRequest);
+        }
+
         public async Task<IEnumerable<User>> GetUsers()
         {
             return await userRepository.GetUsers();
@@ -46,6 +55,11 @@ namespace Tabi.Services
         public async Task<User?> GetUser(int id)
         {
             return await userRepository.GetUser(id);
+        }
+
+        public async Task<User?> GetUser(string? username = null, string? email = null)
+        {
+            return await userRepository.GetUser(username, email);
         }
 
         public async Task<User> CreateUser(
