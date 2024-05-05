@@ -21,6 +21,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
+            #!/bin/bash
             if [ "$(docker ps -a -q -f name=<name>)" ]; then
                 sudo docker kill tabi-server-container
                 sudo docker rm tabi-server-container
