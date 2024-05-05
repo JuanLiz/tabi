@@ -21,3 +21,4 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: cd tabi && ./tabiupdate.sh
+          
