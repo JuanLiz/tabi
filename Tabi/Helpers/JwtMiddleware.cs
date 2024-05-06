@@ -26,7 +26,7 @@ namespace Tabi.Helpers
         {
             try
             {
-                JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+                JwtSecurityTokenHandler tokenHandler = new();
                 byte[] key = Encoding.ASCII.GetBytes(_appSettings.Secret);
                 tokenHandler.ValidateToken(token, new TokenValidationParameters
                 {

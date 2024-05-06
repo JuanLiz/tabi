@@ -21,7 +21,7 @@ namespace Tabi.Repositories
         Task<User?> DeleteUser(int id);
     }
 
-    public class UserRepository(IOptions<AuthSettings> authSettings, TabiContext db) : IUserRepository
+    public class UserRepository(IOptions<AuthSettings> authSettings, TabiContext db, IUserTypeRepository userTypeRepository) : IUserRepository
     {
 
         private readonly AuthSettings authSettings = authSettings.Value;
@@ -33,7 +33,7 @@ namespace Tabi.Repositories
             User? user = await db.Users.FirstOrDefaultAsync(u =>
                 (u.Username == authRequest.Username || u.Email == authRequest.Email)
                 && u.Password == authRequest.Password);
-            
+
             if (user == null) return null;
 
             // Generate JWT
@@ -45,16 +45,17 @@ namespace Tabi.Repositories
         // helper methods
         private async Task<string> GenerateJwtToken(User user)
         {
+            UserType? userType = await userTypeRepository.GetUserType(user.UserTypeID);
+
             //Generate token that is valid for 7 days
             var tokenHandler = new JwtSecurityTokenHandler();
             var token = await Task.Run(() =>
             {
-
-                var key = Encoding.ASCII.GetBytes(authSettings.Secret);
-                var tokenDescriptor = new SecurityTokenDescriptor
+                byte[] key = Encoding.ASCII.GetBytes(authSettings.Secret);
+                SecurityTokenDescriptor tokenDescriptor = new()
                 {
                     Subject = new ClaimsIdentity(new[] { new Claim("id", user.UserID.ToString()) }),
-                    Expires = DateTime.UtcNow.AddDays(7),
+                    Expires = DateTime.UtcNow.AddDays(userType?.Name == "Jugador" ? 28 : 7),
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
                 };
                 return tokenHandler.CreateToken(tokenDescriptor);
