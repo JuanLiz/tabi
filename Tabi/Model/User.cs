@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
+using Sieve.Attributes;
 
 namespace Tabi.Model
 {
@@ -23,8 +24,10 @@ namespace Tabi.Model
         [MaxLength(10)]
         public string? DocumentNumber { get; set; }
         [MaxLength(12)]
+        [Sieve(CanFilter = true, CanSort = true)]
         public string? Username { get; set; }
         [MaxLength(320)]
+        [Sieve(CanFilter = true, CanSort = true)]
         public required string Email { get; set; }
         [MinLength(6)]
         [MaxLength(128)]

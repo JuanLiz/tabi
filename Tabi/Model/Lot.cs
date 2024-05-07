@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Sieve.Attributes;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
@@ -9,6 +10,7 @@ namespace Tabi.Model
         [Key]
         public int LotID { get; set; }
         [ForeignKey(nameof(Farm))]
+        [Sieve(CanFilter = true, CanSort = true)]
         public required int FarmID { get; set; }
         [MaxLength(30)]
         public required string Name { get; set; }

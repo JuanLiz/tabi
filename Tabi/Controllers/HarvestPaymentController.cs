@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
+using Sieve.Models;
+using Sieve.Services;
 using Tabi.Helpers;
 using Tabi.Model;
 using Tabi.Services;
@@ -10,13 +12,13 @@ namespace Tabi.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class HarvestPaymentController(IHarvestPaymentService harvestPaymentService) : ControllerBase
+    public class HarvestPaymentController(ISieveProcessor sieveProcessor, IHarvestPaymentService harvestPaymentService) : ControllerBase
     {
         [HttpGet]
-        public async Task<IActionResult> GetHarvestPayments()
+        public async Task<IActionResult> GetHarvestPayments([FromQuery] SieveModel sieveModel)
         {
             IEnumerable<HarvestPayment> harvestPayments = await harvestPaymentService.GetHarvestPayments();
-            return Ok(harvestPayments);
+            return Ok(sieveProcessor.Apply(sieveModel, harvestPayments.AsQueryable()));
         }
 
         [HttpGet("{id:int}")]

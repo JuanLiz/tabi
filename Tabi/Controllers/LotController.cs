@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
+using Sieve.Models;
+using Sieve.Services;
 using Tabi.Helpers;
 using Tabi.Model;
 using Tabi.Services;
@@ -10,13 +12,13 @@ namespace Tabi.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class LotController(ILotService lotService) : ControllerBase
+    public class LotController(ISieveProcessor sieveProcessor, ILotService lotService) : ControllerBase
     {
         [HttpGet]
-        public async Task<IActionResult> GetLots()
+        public async Task<IActionResult> GetLots([FromQuery] SieveModel sieveModel)
         {
             IEnumerable<Lot> lots = await lotService.GetLots();
-            return Ok(lots);
+            return Ok(sieveProcessor.Apply(sieveModel, lots.AsQueryable()));
         }
 
         [HttpGet("{id:int}")]

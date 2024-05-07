@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Sieve.Attributes;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
@@ -9,8 +10,10 @@ namespace Tabi.Model
         [Key]
         public int HarvestPaymentID { get; set; }
         [ForeignKey(nameof(Harvest))]
+        [Sieve(CanFilter = true, CanSort = true)]
         public int HarvestID { get; set; }
         [ForeignKey(nameof(User))]
+        [Sieve(CanFilter = true, CanSort = true)]
         public int? UserID { get; set; }
         public required float HarvestedAmount { get; set; }
         [ForeignKey(nameof(PaymentType))]

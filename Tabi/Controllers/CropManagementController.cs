@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
+using Sieve.Models;
+using Sieve.Services;
 using Tabi.Helpers;
 using Tabi.Model;
 using Tabi.Services;
@@ -10,13 +12,13 @@ namespace Tabi.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class CropManagementController(ICropManagementService cropManagementService) : ControllerBase
+    public class CropManagementController(ISieveProcessor sieveProcessor, ICropManagementService cropManagementService) : ControllerBase
     {
         [HttpGet]
-        public async Task<IActionResult> GetCropManagements()
+        public async Task<IActionResult> GetCropManagements([FromQuery] SieveModel sieveModel)
         {
             IEnumerable<CropManagement> cropManagements = await cropManagementService.GetCropManagements();
-            return Ok(cropManagements);
+            return Ok(sieveProcessor.Apply(sieveModel, cropManagements.AsQueryable()));
         }
 
         [HttpGet("{id:int}")]

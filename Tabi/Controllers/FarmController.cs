@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
+using Sieve.Models;
+using Sieve.Services;
 using Tabi.Helpers;
 using Tabi.Model;
 using Tabi.Services;
@@ -10,13 +12,13 @@ namespace Tabi.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class FarmController(IFarmService farmService) : ControllerBase
+    public class FarmController(ISieveProcessor sieveProcessor, IFarmService farmService) : ControllerBase
     {
         [HttpGet]
-        public async Task<IActionResult> GetFarms()
+        public async Task<IActionResult> GetFarms([FromQuery] SieveModel sieveModel)
         {
             IEnumerable<Farm> farms = await farmService.GetFarms();
-            return Ok(farms);
+            return Ok(sieveProcessor.Apply(sieveModel, farms.AsQueryable()));
         }
 
         [HttpGet("{id:int}")]

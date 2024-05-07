@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
+using Sieve.Models;
+using Sieve.Services;
 using Tabi.Helpers;
 using Tabi.Model;
 using Tabi.Services;
@@ -10,13 +12,13 @@ namespace Tabi.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class UserController(IUserService userService) : ControllerBase
+    public class UserController(ISieveProcessor sieveProcessor, IUserService userService) : ControllerBase
     {
         [HttpGet]
-        public async Task<IActionResult> GetUsers()
+        public async Task<IActionResult> GetUsers([FromQuery] SieveModel sieveModel)
         {
             IEnumerable<User> users = await userService.GetUsers();
-            return Ok(users);
+            return Ok(sieveProcessor.Apply(sieveModel, users.AsQueryable()));
         }
 
         [HttpGet("{id:int}")]

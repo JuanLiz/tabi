@@ -1,6 +1,4 @@
-﻿using System.ComponentModel;
-
-namespace Tabi.Model
+﻿namespace Tabi.Model
 {
     public class AuthRequest
     {

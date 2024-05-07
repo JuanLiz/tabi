@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Sieve.Services;
 using Tabi.Context;
 using Tabi.Helpers;
 using Tabi.Model;
@@ -17,6 +18,8 @@ builder.Services.AddDbContext<TabiContext>(options =>
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddScoped<ISieveProcessor, TabiSieveProcessor>();
 
 
 // Add scoped repositories

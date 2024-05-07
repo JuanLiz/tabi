@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Sieve.Attributes;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
@@ -9,6 +10,7 @@ namespace Tabi.Model
         [Key]
         public int CropID { get; set; }
         [ForeignKey(nameof(Lot))]
+        [Sieve(CanFilter = true, CanSort = true)]
         public required int LotID { get; set; }
         public required float Hectares { get; set; }
         [ForeignKey(nameof(CropType))]
