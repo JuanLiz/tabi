@@ -9,5 +9,6 @@
         public string? Username { get; set; } = user.Username;
         public string Name { get; set; } = user.Name;
         public string LastName { get; set; } = user.LastName;
+        public int UserTypeID { get; set; } = user.UserTypeID;
     }
 }
