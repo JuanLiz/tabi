@@ -9,7 +9,6 @@ namespace Tabi.Controllers
 
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class UserTypeController(IUserTypeService userTypeService) : ControllerBase
     {
         [HttpGet]
@@ -28,6 +27,7 @@ namespace Tabi.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> CreateUserType(
             [FromForm][Required][MaxLength(30)] string Name)
         {
@@ -36,6 +36,7 @@ namespace Tabi.Controllers
         }
 
         [HttpPut]
+        [Authorize]
         public async Task<IActionResult> UpdateUserType(
             [FromForm][Required] int UserTypeID,
             [FromForm][MaxLength(30)] string? Name)
@@ -47,6 +48,7 @@ namespace Tabi.Controllers
         }
 
         [HttpDelete("{id:int}")]
+        [Authorize]
         public async Task<IActionResult> DeleteUserType(int id)
         {
             UserType? userType = await userTypeService.GetUserType(id);

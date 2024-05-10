@@ -9,7 +9,6 @@ namespace Tabi.Controllers
 
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class DocumentTypeController(IDocumentTypeService documentTypeService) : ControllerBase
     {
         [HttpGet]
@@ -28,6 +27,7 @@ namespace Tabi.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> CreateDocumentType(
             [FromForm][Required][MaxLength(30)] string Name)
         {
@@ -36,6 +36,7 @@ namespace Tabi.Controllers
         }
 
         [HttpPut]
+        [Authorize]
         public async Task<IActionResult> UpdateDocumentType(    
             [FromForm][Required] int DocumentTypeID,
             [FromForm][MaxLength(30)] string? Name)
@@ -47,6 +48,7 @@ namespace Tabi.Controllers
         }
 
         [HttpDelete("{id:int}")]
+        [Authorize]
         public async Task<IActionResult> DeleteDocumentType(int id)
         {
             DocumentType? documentType = await documentTypeService.GetDocumentType(id);
