@@ -40,13 +40,13 @@ namespace Tabi.Controllers
             if (Username != null)
             {
                 User? user = await userService.GetUserByUsername(Username);
-                if (user != null)
+                if (user != null && user.UserTypeID == UserTypeID)
                     return BadRequest(new { message = "Username is already taken" });
             }
 
             // Check if the email is already taken
             User? emailUser = await userService.GetUserByEmail(Email);
-            if (emailUser != null)
+            if (emailUser != null && emailUser.UserTypeID == UserTypeID)
                 return BadRequest(new { message = "Email is already taken" });
 
 

@@ -45,7 +45,19 @@ namespace Tabi.Controllers
             string? Phone,
             [FromForm][MaxLength(50)] string? Address)
         {
-            // TODO - Check if user in same role or username already exists
+            // Check if the username is already taken
+            if (Username != null)
+            {
+                User? userCheck = await userService.GetUserByUsername(Username);
+                if (userCheck != null && userCheck.UserTypeID == UserTypeID)
+                    return BadRequest(new { message = "Username is already taken" });
+            }
+
+            // Check if the email is already taken
+            User? emailUser = await userService.GetUserByEmail(Email);
+            if (emailUser != null && emailUser.UserTypeID == UserTypeID)
+                return BadRequest(new { message = "Email is already taken" });
+
             User user = await userService.CreateUser(UserTypeID, Name, LastName, DocumentTypeID, DocumentNumber, Username, Email, Password, Phone, Address);
             return CreatedAtAction(nameof(GetUser), new { id = user.UserID }, user);
         }
