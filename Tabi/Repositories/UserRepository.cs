@@ -15,8 +15,8 @@ namespace Tabi.Repositories
         Task<AuthResponse?> Authenticate(AuthRequest authRequest);
         Task<IEnumerable<User>> GetUsers();
         Task<User?> GetUser(int id);
-        Task<User?> GetUserByUsername(string username);
-        Task<User?> GetUserByEmail(string email);
+        Task<User?> GetUserByUsername(string username, int userTypeID);
+        Task<User?> GetUserByEmail(string email, int userTypeID);
         Task<User> CreateUser(User user);
         Task<User> UpdateUser(User user);
         Task<User?> DeleteUser(int id);
@@ -75,14 +75,14 @@ namespace Tabi.Repositories
             return await db.Users.FindAsync(id);
         }
 
-        public async Task<User?> GetUserByUsername(string username)
+        public async Task<User?> GetUserByUsername(string username, int userTypeID)
         {
-            return await db.Users.FirstOrDefaultAsync(u => u.Username == username);
+            return await db.Users.FirstOrDefaultAsync(u => u.Username == username && u.UserTypeID == userTypeID);
         }
 
-        public async Task<User?> GetUserByEmail(string email)
+        public async Task<User?> GetUserByEmail(string email, int userTypeID)
         {
-            return await db.Users.FirstOrDefaultAsync(u => u.Email == email);
+            return await db.Users.FirstOrDefaultAsync(u => u.Email == email && u.UserTypeID == userTypeID);
         }
 
         public async Task<User> CreateUser(User user)

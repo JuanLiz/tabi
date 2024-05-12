@@ -36,18 +36,17 @@ namespace Tabi.Controllers
             string? Phone,
             [FromForm][MaxLength(50)] string? Address)
         {
+
+            // Check if the email is already taken
+            User? emailUser = await userService.GetUserByEmail(Email, UserTypeID);
+            if (emailUser != null) return BadRequest(new { message = "Email is already taken" });
+
             // Check if the username is already taken
             if (Username != null)
             {
-                User? user = await userService.GetUserByUsername(Username);
-                if (user != null && user.UserTypeID == UserTypeID)
-                    return BadRequest(new { message = "Username is already taken" });
+                User? user = await userService.GetUserByUsername(Username, UserTypeID);
+                if (user != null) return BadRequest(new { message = "Username is already taken" });
             }
-
-            // Check if the email is already taken
-            User? emailUser = await userService.GetUserByEmail(Email);
-            if (emailUser != null && emailUser.UserTypeID == UserTypeID)
-                return BadRequest(new { message = "Email is already taken" });
 
 
             User response = await userService.CreateUser(

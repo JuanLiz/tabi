@@ -10,8 +10,8 @@ namespace Tabi.Services
         Task<AuthResponse?> Authenticate(AuthRequest authRequest);
         Task<IEnumerable<User>> GetUsers();
         Task<User?> GetUser(int id);
-        Task<User?> GetUserByUsername(string username);
-        Task<User?> GetUserByEmail(string email);
+        Task<User?> GetUserByUsername(string username, int userTypeID);
+        Task<User?> GetUserByEmail(string email, int userTypeID);
 
         Task<User> CreateUser(
             int UserTypeID,
@@ -59,15 +59,15 @@ namespace Tabi.Services
         }
 
         // Get user by username 
-        public async Task<User?> GetUserByUsername(string username)
+        public async Task<User?> GetUserByUsername(string username, int userTypeID)
         {
-            return await userRepository.GetUserByUsername(username);
+            return await userRepository.GetUserByUsername(username, userTypeID);
         }
 
         // Get user by email
-        public async Task<User?> GetUserByEmail(string email)
+        public async Task<User?> GetUserByEmail(string email, int userTypeID)
         {
-            return await userRepository.GetUserByEmail(email);
+            return await userRepository.GetUserByEmail(email, userTypeID);
         }
 
         public async Task<User> CreateUser(
