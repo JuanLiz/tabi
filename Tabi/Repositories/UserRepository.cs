@@ -31,9 +31,15 @@ namespace Tabi.Repositories
         public async Task<AuthResponse?> Authenticate(AuthRequest authRequest)
         {
             // Check for username or email
-            User? user = await db.Users.FirstOrDefaultAsync(u =>
-                (u.Username == authRequest.Username || u.Email == authRequest.Email)
-                && u.Password == authRequest.Password);
+            if (authRequest.Username==null) {
+                 User? user = await db.Users.FirstOrDefaultAsync(u => u.Email == authRequest.Email && u.Password == authRequest.Password);
+            }
+            else {
+                User? user = await db.Users.FirstOrDefaultAsync(u =>
+                    (u.Username == authRequest.Username && u.Email == authRequest.Email)
+                    && u.Password == authRequest.Password);
+            }
+            
 
             if (user == null) return null;
 
