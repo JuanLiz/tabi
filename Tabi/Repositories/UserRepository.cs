@@ -36,15 +36,15 @@ namespace Tabi.Repositories
             if (authRequest.Username == null)
             {
                 user = await db.Users.FirstOrDefaultAsync(u =>
-                    u.Email.Equals(authRequest.Email, StringComparison.InvariantCulture)
-                    && u.Password.Equals(authRequest.Password, StringComparison.InvariantCulture));
+                    u.Email.Equals(authRequest.Email)
+                    && u.Password.Equals(authRequest.Password));
             }
             else
             {
                 user = await db.Users.FirstOrDefaultAsync(u =>
                     u.Username != null
-                    && u.Username.Equals(authRequest.Username, StringComparison.InvariantCulture)
-                    && u.Password.Equals(authRequest.Password, StringComparison.InvariantCulture));
+                    && u.Username.Equals(authRequest.Username)
+                    && u.Password.Equals(authRequest.Password));
             }
 
 
