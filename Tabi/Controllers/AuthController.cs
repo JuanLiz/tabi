@@ -13,7 +13,7 @@ namespace Tabi.Controllers
         [HttpPost("Login")]
         public async Task<IActionResult> Authenticate([FromForm] AuthRequest authRequest)
         {
-            var response = await userService.Authenticate(authRequest);
+            AuthResponse? response = await userService.Authenticate(authRequest);
 
             if (response == null)
                 return BadRequest(new { message = "Username or password is incorrect" });
@@ -36,7 +36,21 @@ namespace Tabi.Controllers
             string? Phone,
             [FromForm][MaxLength(50)] string? Address)
         {
-            var response = await userService.CreateUser(
+            // Check if the username is already taken
+            if (Username != null)
+            {
+                User? user = await userService.GetUserByUsername(Username);
+                if (user != null)
+                    return BadRequest(new { message = "Username is already taken" });
+            }
+
+            // Check if the email is already taken
+            User? emailUser = await userService.GetUserByEmail(Email);
+            if (emailUser != null)
+                return BadRequest(new { message = "Email is already taken" });
+
+
+            User response = await userService.CreateUser(
                 UserTypeID,
                 Name,
                 LastName,
