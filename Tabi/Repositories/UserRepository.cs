@@ -37,9 +37,7 @@ namespace Tabi.Repositories
                  user = await db.Users.FirstOrDefaultAsync(u => u.Email == authRequest.Email && u.Password == authRequest.Password);
             }
             else {
-                 user = await db.Users.FirstOrDefaultAsync(u =>
-                    (u.Username == authRequest.Username && u.Email == authRequest.Email)
-                    && u.Password == authRequest.Password);
+                 user = await db.Users.FirstOrDefaultAsync(u => u.Username == authRequest.Username && u.Password == authRequest.Password);
             }
             
 
