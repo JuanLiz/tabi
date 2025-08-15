@@ -74,7 +74,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           source: "./efbundle-output/efbundle"
-          target: /tmp/efbundle
+          target: /tmp
           strip_components: 1
 
       - name: Execute migrations on server
@@ -84,10 +84,11 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            cd /tmp
+            cd /tmp/efbundle-output
             chmod +x efbundle
             ./efbundle --connection "${{ secrets.DATABASE_CONNECTION_STRING }}"
             rm efbundle
+            rmdir /tmp/efbundle-output
 
       - name: Dokploy Deployment
         uses: ahmedabdou14/dokploy-deploy-gha@1.0.0
