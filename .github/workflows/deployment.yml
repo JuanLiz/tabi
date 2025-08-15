@@ -63,7 +63,7 @@ jobs:
           context: .
           push: false
           # Specify the platform for the migrations bundle
-          platforms: ${{ env.SERVER_ARCH }}
+          platforms: linux/arm64
           target: bundle-export
           outputs: type=local,dest=./efbundle-output
 
