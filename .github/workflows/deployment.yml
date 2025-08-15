@@ -86,7 +86,7 @@ jobs:
           script: |
             cd /tmp
             chmod +x efbundle
-              ./efbundle --connection "${{ secrets.DATABASE_CONNECTION_STRING }}"
+            ./efbundle --connection "${{ secrets.DATABASE_CONNECTION_STRING }}"
             rm efbundle
 
       - name: Dokploy Deployment
