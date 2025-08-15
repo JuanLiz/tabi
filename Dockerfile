@@ -3,7 +3,7 @@
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 USER app
 WORKDIR /app
-#HTTP
+# HTTP
 EXPOSE 8080
 # HTTPS
 EXPOSE 8081

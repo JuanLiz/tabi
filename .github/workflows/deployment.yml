@@ -63,8 +63,8 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
-            docker run --rm \
+            sudo docker pull ${{ steps.meta.outputs.tags }}
+            sudo docker run --rm \
               -e ConnectionStrings__DefaultConnection='${{ secrets.DATABASE_CONNECTION_STRING }}' \
               ${{ env.IMAGE_NAME }}:latest \
               dotnet ef database update
