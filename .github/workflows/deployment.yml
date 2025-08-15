@@ -3,7 +3,7 @@ name: Publish and deploy Docker image
 on:
   push:
     tags:
-      - 'v[0-9]+.[0-9]+.[0-9]+'
+      - "v[0-9]+.[0-9]+.[0-9]+"
 
 env:
   REGISTRY: ghcr.io
@@ -67,38 +67,28 @@ jobs:
           target: bundle-export
           outputs: type=local,dest=./efbundle-output
 
-
-      - name: Upload migrations bundle as artifact
-        uses: actions/upload-artifact@v4
+      - name: Copy migrations bundle to server
+        uses: appleboy/scp-action@v1.0.0
         with:
-          name: efbundle
-          path: ./efbundle-output/efbundle
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: "./efbundle-output/efbundle"
+          target: /tmp/efbundle
+          strip_components: 1
 
-  deploy:
-    name: Deploy to production
-    needs: build
-    runs-on: ubuntu-latest
-    environment: build
-
-    steps:
-      - name: Download migrations bundle artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: efbundle
-          path: ./efbundle
-
-      - name: Run database migrations
+      - name: Execute migrations on server
         uses: appleboy/ssh-action@v1.2.2
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
-          key: ${{ secrets.SSH_KEY }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cat ./efbundle/efbundle > /tmp/efbundle
-            chmod +x /tmp/efbundle
-            ConnectionStrings__DefaultConnection='${{ secrets.DATABASE_CONNECTION_STRING }}' /tmp/efbundle
-            rm /tmp/efbundle
-      
+            cd /tmp
+            chmod +x efbundle
+            ./efbundle --connection "${{ secrets.DATABASE_CONNECTION_STRING }}"
+            rm efbundle
+
       - name: Dokploy Deployment
         uses: ahmedabdou14/dokploy-deploy-gha@1.0.0
         with:

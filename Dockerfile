@@ -28,7 +28,6 @@ FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 USER app
 WORKDIR /app
 COPY --from=build /app/publish .
-
 # HTTP
 EXPOSE 8080
 # HTTPS
