@@ -10,7 +10,7 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  build-and-push-image:
+  build:
     name: Build and push Docker image
     runs-on: ubuntu-latest
     environment: build
@@ -55,11 +55,37 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          target: final
 
-      - name: Set repo name to lowercase
-        id: string
-        shell: bash
-        run: echo "IMAGE_NAME_LC=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_OUTPUT
+      - name: Extract migrations bundle
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: false
+          # Specify the platform for the migrations bundle
+          platforms: ${{ env.SERVER_ARCH }}
+          target: migrations-bundle
+          outputs: type=local,dest=./efbundle-output
+
+
+      - name: Upload migrations bundle as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: efbundle
+          path: ./efbundle-output/efbundle
+
+  deploy:
+    name: Deploy to production
+    needs: build
+    runs-on: ubuntu-latest
+    environment: build
+
+    steps:
+      - name: Download migrations bundle artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: efbundle
+          path: ./efbundle
 
       - name: Run database migrations
         uses: appleboy/ssh-action@v1.2.2
@@ -68,13 +94,11 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            IMAGE_NAME_LC="${{ steps.string.outputs.IMAGE_NAME_LC }}"
-            sudo docker pull ${{ env.REGISTRY }}/${IMAGE_NAME_LC}:latest
-            sudo docker run --rm \
-              -e ConnectionStrings__DefaultConnection='${{ secrets.DATABASE_CONNECTION_STRING }}' \
-              ${{ env.REGISTRY }}/${IMAGE_NAME_LC}:latest \
-              dotnet ef database update
-
+            cat ./efbundle/efbundle > /tmp/efbundle
+            chmod +x /tmp/efbundle
+            ConnectionStrings__DefaultConnection='${{ secrets.DATABASE_CONNECTION_STRING }}' /tmp/efbundle
+            rm /tmp/efbundle
+      
       - name: Dokploy Deployment
         uses: ahmedabdou14/dokploy-deploy-gha@1.0.0
         with:

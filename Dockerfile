@@ -17,6 +17,17 @@ COPY . .
 WORKDIR "/src/Tabi"
 RUN dotnet build "./Tabi.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
+# Generate migrations bundle for specific architecture
+FROM build AS migrations-bundle
+ARG TARGETPLATFORM
+RUN case ${TARGETPLATFORM} in \
+        "linux/amd64") RID="linux-x64" ;; \
+        "linux/arm64") RID="linux-arm64" ;; \
+        *) echo "Unsupported architecture: ${TARGETPLATFORM}" >&2; exit 1 ;; \
+    esac && \
+    dotnet ef migrations bundle --output /app/efbundle --force --runtime ${RID}
+
+
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
 RUN dotnet publish "./Tabi.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
