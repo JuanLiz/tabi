@@ -36,8 +36,7 @@ RUN case ${TARGETPLATFORM} in \
     dotnet ef migrations bundle \
         --runtime ${RID} \
         -p "./Tabi.csproj" \
-        -o /app/efbundle \
-        --no-build
+        -o /app/efbundle
 
 
 FROM scratch AS bundle-export
