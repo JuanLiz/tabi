@@ -30,8 +30,10 @@ RUN case ${TARGETPLATFORM} in \
         "linux/arm64") RID="linux-arm64" ;; \
         *) echo "Unsupported architecture: ${TARGETPLATFORM}" >&2; exit 1 ;; \
     esac && \
-    dotnet ef migrations bundle --output /app/efbundle --force --runtime ${RID}
+    dotnet ef migrations bundle --no-build --output /app/efbundle --force --runtime ${RID}
 
+FROM scratch AS bundle-export
+COPY --from=migrations-bundle /app/efbundle /efbundle
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
