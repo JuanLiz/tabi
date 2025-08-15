@@ -3,7 +3,7 @@ name: Publish and deploy Docker image
 on:
   push:
     tags:
-      - "v[0-9]+.[0-9]+.[0-9]+"
+      - 'v[0-9]+.[0-9]+.[0-9]+'
 
 env:
   REGISTRY: ghcr.io
@@ -86,7 +86,7 @@ jobs:
           script: |
             cd /tmp
             chmod +x efbundle
-            ./efbundle --connection "${{ secrets.DATABASE_CONNECTION_STRING }}"
+              ./efbundle --connection "${{ secrets.DATABASE_CONNECTION_STRING }}"
             rm efbundle
 
       - name: Dokploy Deployment
