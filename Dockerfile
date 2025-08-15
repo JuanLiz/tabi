@@ -10,6 +10,11 @@ EXPOSE 8081
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
+
+# Install EF Core
+RUN dotnet tool install --global dotnet-ef
+ENV PATH="${PATH}:/root/.dotnet/tools"
+
 WORKDIR /src
 COPY ["Tabi/Tabi.csproj", "Tabi/"]
 RUN dotnet restore "./Tabi/Tabi.csproj"
