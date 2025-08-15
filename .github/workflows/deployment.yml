@@ -56,6 +56,11 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
+      - name: Set repo name to lowercase
+        id: string
+        shell: bash
+        run: echo "IMAGE_NAME_LC=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_OUTPUT
+
       - name: Run database migrations
         uses: appleboy/ssh-action@v1.2.2
         with:
@@ -63,10 +68,11 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            sudo docker pull ${{ steps.meta.outputs.tags }}
+            IMAGE_NAME_LC="${{ steps.string.outputs.IMAGE_NAME_LC }}"
+            sudo docker pull ${{ env.REGISTRY }}/${IMAGE_NAME_LC}:latest
             sudo docker run --rm \
               -e ConnectionStrings__DefaultConnection='${{ secrets.DATABASE_CONNECTION_STRING }}' \
-              ${{ env.IMAGE_NAME }}:latest \
+              ${{ env.REGISTRY }}/${IMAGE_NAME_LC}:latest \
               dotnet ef database update
 
       - name: Dokploy Deployment
